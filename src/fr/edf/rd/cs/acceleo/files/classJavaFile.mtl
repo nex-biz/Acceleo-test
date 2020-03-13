@@ -2,7 +2,7 @@
 [**
  * The documentation of the module classJavaFile.
  */]
-[module classJavaFile('http://www.eclipse.org/uml2/4.0.0/UML')]
+[module classJavaFile('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [import fr::edf::rd::cs::acceleo::files::fileUtils /]
 
@@ -10,7 +10,7 @@
  * The documentation of the template genClassJavaFile.
  * @param aClass
  */]
-[template public genClassJavaFile(aClass : Class)]
+[template public genClassJavaFile(aClass : Class, aModel : Model)]
 [file (aClass.genFilePath(), false, 'UTF-8')]
 [aClass.genCopyrightHeader()/]
 package [aClass.genPackageValue()/];
@@ -23,7 +23,7 @@ package [aClass.genPackageValue()/];
  * @generated
  */
 public class [aClass.name.toUpperFirst()/][aClass.inheritance()/] {
-	[aClass.fieldAssociations()/]
+	[aClass.fieldAssociations( aModel )/]
 	[aClass.fields()/]
 	/**
 	 * The documentation of the constructor.
@@ -33,16 +33,16 @@ public class [aClass.name.toUpperFirst()/][aClass.inheritance()/] {
 	public [aClass.name.toUpperFirst()/]() {
 		super();
 	}
-	[aClass.classBody()/]
+	[aClass.classBody(aModel)/]
 }
 [/file]
 [/template]
 
-[template private classBody(aClass : Class) post(trim())]
+[template private classBody(aClass : Class, aModel : Model) post(trim())]
 
-[aClass.associations()/]
 [aClass.operations()/]
 [aClass.accessors()/]
+[aClass.accessorAssociations(aModel)/]
 
 [/template]
 
@@ -154,20 +154,103 @@ public void set[aProperty.name.toUpperFirst()/]([if (aProperty.upper = -1 or aPr
 [**
  * TEST EN COURS
 */]
-[template private fieldAssociations(aClass : Class)]
+
+[template private fieldOwnedAssociations(aClass : Class)]
 /**
  * ###### fieldAssociations
  */
 [for (aRelationship : Relationship | aClass.getRelationships()->select( aAssociation : Relationship | aAssociation.oclIsTypeOf(Association) ) )]
 /**
  * aRelationship.toString(): [aRelationship.toString()/].
+ * aRelationship.owner.toString(): [aRelationship.owner.toString()/].
+ * aRelationship.relatedElement.toString(): [aRelationship.relatedElement.toString()/].
+ * aRelationship.eContainer().toString(): [aRelationship.eContainer().toString()/].
+ * aRelationship.ownedElement().toString(): [aRelationship.ownedElement.toString()/].
+ * aRelationship.eClass().eAllReferences.toString(): [aRelationship.eClass().eAllReferences.toString()/].
+ * aRelationship.getSourceDirectedRelationships().toString(): [aRelationship.getSourceDirectedRelationships().toString()/].
+ * aRelationship.getTargetDirectedRelationships().toString(): [aRelationship.getTargetDirectedRelationships().toString()/].
+ * aRelationship.eCrossReferences(): [aClass.eCrossReferences()/].
+ * aRelationship.eCrossReferences(): [aClass.getAssociations()/].
  */
 [/for]
 [for (aAssociation : Association | aClass.getAssociations()->select( aAssociation : Association | aAssociation.oclIsTypeOf(Association) ) )]
 /**
  * aAssociation.toString(): [aAssociation.toString()/].
+ * aAssociation.owner.toString(): [aAssociation.owner.toString()/].
+ * aAssociation.relatedElement.toString(): [aAssociation.relatedElement.toString()/].
+ * aAssociation.eContainer().toString(): [aAssociation.eContainer().toString()/].
+ * aAssociation.ownedElement().toString(): [aAssociation.ownedElement.toString()/].
+ * aAssociation.eClass().eAllReferences.toString(): [aAssociation.eClass().eAllReferences.toString()/].
+ * aAssociation.getSourceDirectedRelationships().toString(): [aAssociation.getSourceDirectedRelationships().toString()/].
+ * aAssociation.getTargetDirectedRelationships().toString(): [aAssociation.getTargetDirectedRelationships().toString()/].
+ * aAssociation.endType().toString(): [aAssociation.endType.toString()/].
+ * aAssociation.memberEnd().toString(): [aAssociation.memberEnd.toString()/].
  */
 [/for]
 [/template]
 
 
+[template private fieldAssociations(aClass : Class, aModel : Model)]
+[for (aType : Type | aModel.eAllContents(Package).ownedType)]
+[if (aType.oclIsKindOf(Association))]
+[aType.oclAsType(Association).genAssociationField( aClass )/]
+[/if]
+[/for]
+[/template]
+
+
+[template private accessorAssociations(aClass : Class, aModel : Model)]
+[for (aType : Type | aModel.eAllContents(Package).ownedType)]
+[if (aType.oclIsKindOf(Association))]
+[aType.oclAsType(Association).genAssociationAccessor( aClass )/]
+[/if]
+[/for]
+[/template]
+
+
+[template private genAssociationField(aAssociation : Association, aClass : Class)]
+	[for (aProperty : Property | aAssociation.ownedElement)]	
+		[if ( aClass.name = aProperty.type.name )]
+
+/**
+ * The documentation of the Association field.
+ * 
+ * @generated
+ */
+			[if ( aProperty.siblings()->at(1).oclAsType( Property ).upper = -1 )]
+List<[ aProperty.siblings()->at(1).oclAsType( Property ).type.name /]> [ aProperty.siblings()->at(1).oclAsType( Property ).name /];
+			[else]
+[ aProperty.siblings()->at(1).oclAsType( Property ).type.name /] [ aProperty.siblings()->at(1).oclAsType( Property ).name /];
+			[/if]
+		[else]
+		[/if]
+	[/for]
+
+[/template]
+
+
+[template private genAssociationAccessor(aAssociation : Association, aClass : Class)]
+	[for (aProperty : Property | aAssociation.ownedElement)]	
+		[if ( aClass.name = aProperty.type.name )]
+/**
+ * The documentation of the associations get[aProperty.siblings()->at(1).oclAsType( Property ).name.toUpperFirst()/].
+ * 
+ * @generated
+ */
+public [if (aProperty.siblings()->at(1).oclAsType( Property ).upper = -1 )]List<[ aProperty.siblings()->at(1).oclAsType( Property ).type.name /]>[else][aProperty.siblings()->at(1).oclAsType( Property ).type.name/][/if] get[aProperty.siblings()->at(1).oclAsType( Property ).name.toUpperFirst()/]() {
+	return this.[aProperty.siblings()->at(1).oclAsType( Property ).name.toLowerFirst()/];
+}
+
+/**
+ * The documentation of the associations set[aProperty.siblings()->at(1).oclAsType( Property ).name.toUpperFirst()/].
+ * 
+ * @generated
+ */
+public void set[aProperty.siblings()->at(1).oclAsType( Property ).name.toUpperFirst()/]([if (aProperty.siblings()->at(1).oclAsType( Property ).upper = -1 )]List<[ aProperty.siblings()->at(1).oclAsType( Property ).type.name /]>[else][aProperty.siblings()->at(1).oclAsType( Property ).type.name/][/if] new[aProperty.siblings()->at(1).oclAsType( Property ).name.toUpperFirst()/]) {
+	this.[aProperty.siblings()->at(1).oclAsType( Property ).name.toLowerFirst()/] = new[aProperty.siblings()->at(1).oclAsType( Property ).name.toUpperFirst()/];
+}
+		[else]
+		[/if]
+	[/for]
+
+[/template]

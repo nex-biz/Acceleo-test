@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module fileUtils('http://www.eclipse.org/uml2/4.0.0/UML')]
+[module fileUtils('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [import fr::edf::rd::cs::acceleo::properties::properties /]
 

@@ -2,7 +2,7 @@
 [**
  * The documentation of the module uml2java.
  */]
-[module uml2java('http://www.eclipse.org/uml2/4.0.0/UML')]
+[module uml2java('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [import fr::edf::rd::cs::acceleo::files::classJavaFile /]
 [import fr::edf::rd::cs::acceleo::files::enumJavaFile /]
@@ -16,7 +16,7 @@
 [comment @main/]
 [for (aType : Type | aModel.eAllContents(Package).ownedType)]
 	[if (aType.oclIsKindOf(Class))]
-		[aType.oclAsType(Class).genClassJavaFile()/]
+		[aType.oclAsType(Class).genClassJavaFile( aModel )/]
 	[elseif (aType.oclIsKindOf(Interface))]
 		[aType.oclAsType(Interface).genInterfaceJavaFile()/]
 	[elseif (aType.oclIsKindOf(Enumeration))]

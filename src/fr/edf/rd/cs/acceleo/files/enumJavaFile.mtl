@@ -2,7 +2,7 @@
 [**
  * The documentation of the module enumJavaFile.
  */]
-[module enumJavaFile('http://www.eclipse.org/uml2/4.0.0/UML')]
+[module enumJavaFile('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [import fr::edf::rd::cs::acceleo::files::fileUtils /]
 
