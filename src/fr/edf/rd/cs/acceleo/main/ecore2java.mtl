@@ -1,0 +1,27 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module uml2java.
+ */]
+[module ecore2java('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::files::ecore::classJavaFileEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::enumJavaFileEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::interfaceJavaFileEcore /]
+
+[**
+ * This template is the entry point of the generation.
+ * @param aModel The root of the input model.
+ */]
+[template public main( aPackage : EPackage )]
+[comment @main/]
+[for ( aClassifier : EClassifier | aPackage.eAllContents( EClassifier ) )]
+	[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)] 
+		[aClassifier.genClassJavaFile( aPackage )/]
+	[elseif (aClassifier.oclIsKindOf(EClass) and aClassifier.oclAsType(EClass).interface)]
+		[aClassifier.genInterfaceJavaFile()/]
+	[elseif (aClassifier.oclIsKindOf(EEnum))]
+		[aClassifier.genEnumJavaFile()/]
+	[/if]
+[/for]
+[/template]
+
