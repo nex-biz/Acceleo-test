@@ -2,14 +2,14 @@
 [**
  * The documentation of the module properties.
  */]
-[module properties('http://www.eclipse.org/emf/2002/Ecore')]
+[module propertiesEcore('http://www.eclipse.org/emf/2002/Ecore')]
 
 [**
  * The documentation of the template generateElement.
  * @param aClass
  */]
 [template public getSourceFolder(anOclAny : OclAny)]
-[getProperty('sourcefolder').log('sourcefolder:')/]
+[getProperty('sourcefolder').log('sourcefolder :')/]
 [/template]
 
 

@@ -4,9 +4,9 @@
  */]
 [module uml2java('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-[import fr::edf::rd::cs::acceleo::files::classJavaFile /]
-[import fr::edf::rd::cs::acceleo::files::enumJavaFile /]
-[import fr::edf::rd::cs::acceleo::files::interfaceJavaFile /]
+[import fr::edf::rd::cs::acceleo::files::uml::classJavaFileUml /]
+[import fr::edf::rd::cs::acceleo::files::uml::enumJavaFileUml /]
+[import fr::edf::rd::cs::acceleo::files::uml::interfaceJavaFileUml /]
 
 [**
  * This template is the entry point of the generation.

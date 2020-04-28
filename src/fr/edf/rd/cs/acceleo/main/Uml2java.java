@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.Monitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-//import org.eclipse.uml2.uml.resource.UMLResource;
 
 /**
  * Entry point of the 'Uml2java' generation module.
@@ -323,13 +322,24 @@ public class Uml2java extends AbstractAcceleoGenerator {
         super.registerPackages(resourceSet);
         if (!isInWorkspace(org.eclipse.emf.ecore.EcorePackage.class)) {
             resourceSet.getPackageRegistry().put(org.eclipse.emf.ecore.EcorePackage.eINSTANCE.getNsURI(), org.eclipse.emf.ecore.EcorePackage.eINSTANCE);
+            System.out.println(org.eclipse.emf.ecore.EcorePackage.eINSTANCE.getNsURI());
         }
 
     
     
         if (!isInWorkspace(org.eclipse.uml2.uml.UMLPackage.class)) {
             resourceSet.getPackageRegistry().put(org.eclipse.uml2.uml.UMLPackage.eINSTANCE.getNsURI(), org.eclipse.uml2.uml.UMLPackage.eINSTANCE);
+            System.out.println(org.eclipse.uml2.uml.UMLPackage.eINSTANCE.getNsURI());
         }
+        
+        for( String key : resourceSet.getPackageRegistry().keySet() ) {
+        	System.out.println( "key : " + key + " => " + resourceSet.getPackageRegistry().get( key ) );
+        }
+        //resourceSet.getPackageRegistry().put("fr.edf.rd.cs.acceleo/model/SCL.ecore", org.eclipse.emf.ecore.EcorePackage.eINSTANCE);
+        //resourceSet.getPackageRegistry().put("/fr.edf.rd.cs.acceleo/model/SCL.ecore", org.eclipse.emf.ecore.EcorePackage.eINSTANCE);
+        //resourceSet.getPackageRegistry().put("/model/SCL.ecore", org.eclipse.emf.ecore.EcorePackage.eINSTANCE);
+        //resourceSet.getPackageRegistry().put("model/SCL.ecore", org.eclipse.emf.ecore.EcorePackage.eINSTANCE);
+        //resourceSet.getPackageRegistry().put("file:///C:/Workspace/Projets/workspace-eclipse-modeling-2019-12-R-win32-x86_64/fr.edf.rd.cs.acceleo/model/SCL.ecore", org.eclipse.emf.ecore.EcorePackage.eINSTANCE);
     }
 
     /**

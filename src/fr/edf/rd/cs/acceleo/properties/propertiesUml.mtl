@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module properties.
+ */]
+[module propertiesUml('http://www.eclipse.org/uml2/5.0.0/UML')]
+
+[import fr::edf::rd::cs::acceleo::files::uml::fileUtilsUml /]
+
+[**
+ * The documentation of the template generateElement.
+ * @param aClass
+ */]
+[template public getSourceFolder(anOclAny : OclAny)]
+[getProperty('sourcefolder')/]
+[/template]

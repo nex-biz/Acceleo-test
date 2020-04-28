@@ -5,6 +5,7 @@
 [module classJavaFileEcore('http://www.eclipse.org/emf/2002/Ecore')]
 
 [import fr::edf::rd::cs::acceleo::files::ecore::fileUtilsEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaAnnotationEcore /]
 
 
 [**
@@ -47,6 +48,7 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
 
 	[aClass.fieldsForConcreteClass()/]
 	[aClass.associationsForConcreteClass()/]
+	[aClass.fieldsFromParentForConcreteClass()/]
 	/**
 	 * The documentation of the constructor.
 	 * 
@@ -63,6 +65,7 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
 [template private classBody(aClass : EClassifier, aPackage : EPackage) post(trim())]
 
 [aClass.fieldsAccessorsForConcreteClass()/]
+[aClass.fieldsAccessorsFromParentForConcreteClass()/]
 [aClass.associationsAccessorsForConcreteClass()/]
 
 [/template]
@@ -109,6 +112,20 @@ private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aPrope
 [/for]
 [/template]
 
+
+
+[template private fieldsFromParentForConcreteClass(aClass : EClassifier)]
+[for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
+		[aSuperType.name.log(' aSuperType :')/]
+	[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
+		[aSuperType2.name.log('    aSuperType2 :')/]
+[aSuperType2.fieldsForConcreteClass()/]
+	[/for]
+[/for]
+[/template]
+
+
+
 [template private associationsForConcreteClass(aClass : EClassifier)]
 [for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
 /**
@@ -143,6 +160,17 @@ public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound 
 
 [/for]
 [/template]
+
+
+[template private fieldsAccessorsFromParentForConcreteClass(aClass : EClassifier)]
+[for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
+[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
+[aSuperType2.fieldsAccessorsForConcreteClass()/]
+[/for]
+[/for]
+[/template]
+
+
 
 [template private associationsAccessorsForConcreteClass(aClass : EClassifier)]
 [for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
