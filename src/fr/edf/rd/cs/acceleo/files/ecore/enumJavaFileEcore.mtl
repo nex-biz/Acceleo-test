@@ -1,0 +1,35 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module enumJavaFile.
+ */]
+[module enumJavaFileEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::files::ecore::fileUtilsEcore /]
+
+[**
+ * The documentation of the template genEnumJavaFile.
+ * @param aEnumeration
+ */]
+[template public genEnumJavaFile(anEnumeration : EClassifier)]
+[file (anEnumeration.genFilePath(''), false, 'UTF-8')]
+[anEnumeration.genCopyrightHeader()/]
+package [anEnumeration.genPackageValue()/];
+
+/**
+ * The documentation of the enumeration [anEnumeration.name.toUpperFirst()/].
+ * 
+ * @generated
+ */
+public enum [anEnumeration.name.toUpperFirst()/] {
+	[for (anEnumerationLiteral : EEnumLiteral | anEnumeration.oclAsType( EEnum ).eLiterals)]
+	/**
+	 * The documentation of the enumeration literal [anEnumerationLiteral.name.toUpper()/].
+	 * 
+	 * @generated
+	 */
+	[anEnumerationLiteral.name.toUpper()/],
+	
+	[/for]
+}
+[/file]
+[/template]

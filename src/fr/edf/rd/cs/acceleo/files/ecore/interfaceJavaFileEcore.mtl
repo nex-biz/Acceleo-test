@@ -1,0 +1,49 @@
+[comment encoding = UTF-8 /]
+[module interfaceJavaFileEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::files::ecore::fileUtilsEcore /]
+
+[**
+ * The documentation of the template genInterfaceJavaFile.
+ * @param aInterface
+ */]
+[template public genInterfaceJavaFile(anInterface : EClassifier)]
+[file (anInterface.genFilePath(''), false, 'UTF-8')]
+[anInterface.genCopyrightHeader()/]
+package [anInterface.genPackageValue()/];
+
+[anInterface.genDefaultImport()/]
+
+/**
+ * The documentation of the interface [anInterface.name.toUpperFirst()/].
+ * 
+ * @generated
+ */
+public [anInterface.abstraction()/] interface [anInterface.name.toUpperFirst()/] {
+	[for (anOperation : EOperation | anInterface.oclAsType( EClass ).eAllOperations)]
+	/**
+	 * The documentation of the method [anOperation.name.toLowerFirst()/].
+	 * [for (aComment : EAnnotation | anOperation.oclAsType( EOperation ).eAnnotations)] [aComment.contents/][/for]
+	[for (aParameter : EParameter | anOperation.oclAsType( EOperation ).eParameters) ]
+	 * @param [aParameter.name/]
+	[/for]
+	[if (not ( anOperation.oclAsType( EOperation ).eType.oclIsUndefined()))]
+	 * @return
+	[/if]
+	 * 
+	 * @generated
+	 */
+	public [if (anOperation.eType.oclIsUndefined())]void[else][anOperation.eType.name/][/if] [anOperation.name.toLowerFirst()/]([anOperation.oclAsType( EOperation ).parameters()/]);
+	
+	[/for]
+}
+[/file]
+[/template]
+
+[template private abstraction(aClass : EClassifier)]
+[if (aClass.oclAsType( EClass ).abstract = true )]abstract[/if]
+[/template]
+
+[template private parameters(anOperation : EOperation)]
+[for (aParameter : EParameter | anOperation.eParameters) separator(', ')][aParameter.eType.name.toUpperFirst()/] [aParameter.name.toLowerFirst()/][/for]
+[/template]
