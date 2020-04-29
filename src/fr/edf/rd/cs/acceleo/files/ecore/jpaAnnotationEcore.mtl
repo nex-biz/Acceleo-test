@@ -1,0 +1,61 @@
+[comment encoding = UTF-8 /]
+[module jpaAnnotationEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaCommonEcore /]
+
+[template public genJpaAnnotEntity_(aClass : EClassifier)][/template]
+[template public genJpaAnnotImport_(aClass : EClassifier)][/template]
+
+[template public genJpaAnnotEntity(aClass : EClassifier)]
+[if(aClass.isJpaEntityNeeded())]
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+[else]
+@MappedSuperclass
+[/if]
+[/template]
+
+[template public genJpaAnnotImport(aClass : EClassifier)]
+[if(true or aClass.isJpaEntityNeeded())]
+import javax.persistence.*;
+[/if]
+[/template]
+
+[template public genJpaAnnotAttribute(aProperty : EAttribute, aClass : EClassifier)]
+[aProperty.eType.isPrimitive().toString().log('IS_Primite pour ' + aProperty.eType.name + ' :')/]
+[if( true or aClass.isJpaEntityNeeded() )]
+	[if( aProperty.eType.isPrimitive() )]
+		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@ElementCollection(fetch = FetchType.EAGER) // Primitive
+		[else]// single Reference Primitive
+		[/if]
+	[elseif( aProperty.eType.isEnum() )]
+		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@ElementCollection(fetch = FetchType.EAGER) @Enumerated(javax.persistence.EnumType.STRING)
+		[else]@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
+		[/if]
+	[else]
+		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@OneToMany(fetch = FetchType.LAZY) // Association
+		[else]@ManyToOne(fetch = FetchType.LAZY) // single Attribute Association
+		[/if]
+	[/if]
+[/if]
+[/template]
+
+
+[template public genJpaAnnotAttribute(aProperty : EReference, aClass : EClassifier)]
+[aProperty.eType.isPrimitive().toString().log('IS_Primite pour ' + aProperty.eType.name + ' :')/]
+[if( true or aClass.isJpaEntityNeeded() )]
+	[if( aProperty.eType.isPrimitive() )]
+		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@ElementCollection(fetch = FetchType.EAGER) // Primitive
+		[else]// single Reference Primitive
+		[/if]
+	[elseif( aProperty.eType.isEnum() )]
+		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@ElementCollection(fetch = FetchType.EAGER) @Enumerated(javax.persistence.EnumType.STRING)
+		[else]@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
+		[/if]
+	[else]
+		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@OneToMany(fetch = FetchType.LAZY) // Association
+		[else]@ManyToOne(fetch = FetchType.LAZY) // single Attribute Association
+		[/if]
+	[/if]
+[/if]
+[/template]

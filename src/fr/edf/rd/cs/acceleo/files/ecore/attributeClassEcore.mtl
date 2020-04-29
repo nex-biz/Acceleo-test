@@ -1,0 +1,147 @@
+[comment encoding = UTF-8 /]
+[**
+ * The documentation of the module classJavaFile.
+ */]
+[module attributeClassEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::files::ecore::fileUtilsEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaCommonEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaAnnotationEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaRepositoryEcore /]
+
+
+
+[template private checkForbidenNameL(aName : EString)]
+[if (aName.equalsIgnoreCase('private'))]private_[elseif (aName.equalsIgnoreCase('transient'))]transient_[else][aName.toLowerFirst()/][/if]
+[/template]
+
+[template private checkForbidenNameU(aName : EString)]
+[if (aName.equalsIgnoreCase('private'))]Private_[elseif (aName.equalsIgnoreCase('transient'))]Transient_[else][aName.toUpperFirst()/][/if]
+[/template]
+
+[template public fieldsForConcreteClass(aClass : EClassifier)]
+[for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
+[if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+/**
+ * The documentation of the attribute [aProperty.name.checkForbidenNameL()/].
+ * 
+ * @generated
+ */
+[aProperty.genJpaAnnotAttribute(aClass)/]
+private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/];
+[/if]
+[/for]
+[/template]
+
+
+
+[template public fieldsFromParentForConcreteClass(aClass : EClassifier)]
+[for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
+		[aSuperType.name.log(' aSuperType :')/]
+	[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
+		[aSuperType2.name.log('    aSuperType2 :')/]
+[aSuperType2.fieldsForConcreteClass()/]
+	[/for]
+[/for]
+[/template]
+
+
+
+[template public associationsForConcreteClass(aClass : EClassifier)]
+[for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
+[if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+/**
+ * The documentation of the reference [aProperty.name.checkForbidenNameL()/].
+ * 
+ * @generated
+ */
+[aProperty.genJpaAnnotAttribute(aClass)/]
+private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/];
+[/if]
+[/for]
+[/template]
+
+
+
+[template public fieldsAccessorsForConcreteClass(aClass : EClassifier)]
+[for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
+[if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+/**
+ * The documentation of the getter get[aProperty.name.checkForbidenNameU()/].
+ * 
+ * @generated
+ */
+public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
+	return this.[aProperty.name.checkForbidenNameL()/];
+}
+
+/**
+ * The documentation of the setter set[aProperty.name.checkForbidenNameU()/].
+ * 
+ * @generated
+ */
+public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
+	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
+}
+[/if]
+[/for]
+[/template]
+
+
+[template public fieldsAccessorsFromParentForConcreteClass(aClass : EClassifier)]
+[for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
+[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
+[aSuperType2.fieldsAccessorsForConcreteClass()/]
+[/for]
+[/for]
+[/template]
+
+
+
+[template public associationsAccessorsForConcreteClass(aClass : EClassifier)]
+[for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
+[if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+/**
+ * associations get[aProperty.name.checkForbidenNameU()/].
+ * 
+ * @generated
+ */
+public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
+	return this.[aProperty.name.checkForbidenNameL()/];
+}
+
+/**
+ * associations set[aProperty.name.checkForbidenNameU()/].
+ * 
+ * @generated
+ */
+public void set[aProperty.name.toUpperFirst()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
+	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
+}
+[/if]
+[/for]
+[/template]
+
+
+[template private primitiveName(typeName : String)]
+[if (typeName.equalsIgnoreCase('EBigDecimal'))]java.math.BigDecimal[elseif (typeName.equalsIgnoreCase('EBoolean'))]Boolean[elseif (typeName.equalsIgnoreCase('EBooleanObject'))]Boolean[elseif (typeName.equalsIgnoreCase('EFeatureMapEntry'))]EFeatureMapEntry[elseif (typeName.equalsIgnoreCase('EInt'))]Integer[elseif (typeName.equalsIgnoreCase('EIntegerObject'))]Integer[elseif (typeName.equalsIgnoreCase('EShortObject'))]Short[elseif (typeName.equalsIgnoreCase('EString'))]String[else][typeName/][/if]
+[/template]
+
+
+[**
+ * Generates the name of the type of attribute
+ * @param aClass The class to be named.
+ */]
+[template private genNameForAttribute(attr : EAttribute)]
+[if( attr.eType.isPrimitive() )][attr.eType.name.primitiveName()/][elseif(attr.eType.oclIsKindOf(EEnum))][attr.eType.name.toUpperFirst()/][else][attr.eType.name.toUpperFirst()/][/if]
+[/template]
+
+
+[**
+ * Generates the name of the type of attribute
+ * @param aClass The class to be named.
+ */]
+[template private genNameForAttribute(attr : EReference)]
+[if( attr.eType.isPrimitive() )][attr.eType.name.primitiveName()/][elseif(attr.eType.oclIsKindOf(EEnum))][attr.eType.name.toUpperFirst()/][else][attr.eType.name.toUpperFirst()/][/if]
+[/template]
+

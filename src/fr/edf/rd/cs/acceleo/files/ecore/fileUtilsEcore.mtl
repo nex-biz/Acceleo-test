@@ -49,7 +49,7 @@
  * Computes the package path for the given type (ex: /a/b/c/d/).
  * @param aType The type (class, interface or enumeration most of the time).
  */]
-[template private packagePath(aClassifier : EClassifier)]
+[template public packagePath(aClassifier : EClassifier)]
 [aClassifier.ancestors(EPackage).name->reverse()->sep('/', '/', '/')/]
 [/template]
 
@@ -81,12 +81,4 @@
 import java.util.*;
 import [aClassifier.genPackageValue()/].interfaces.*;
 // [/protected]
-[/template]
-
-
-
-[template public log(msg : String, msg2 : String)]
-[file ('stdout', true, 'Cp1252')]
-LOG: [msg2/][msg/]
-[/file]
 [/template]

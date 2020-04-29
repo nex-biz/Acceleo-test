@@ -1,0 +1,74 @@
+[comment encoding = UTF-8 /]
+[module jpaCommonEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+
+[query public isJpaEntityNeeded(aClass : EClassifier) : Boolean = 
+	true or not ( aClass.oclAsType( EClass ).abstract )
+/]
+
+[query public isJpaMappedNeeded(aClass : EClassifier) : Boolean = 
+	false and aClass.oclAsType( EClass ).abstract
+/]
+
+
+[** query public isJpaSuperNeeded(aClass : EClassifier, aPackage : EPackage) : Boolean = 
+	aPackage.eAllContents()
+	->excluding( aClass )
+	->select(
+		e : EClassifier | e.ancestors()->includes( aClass )
+	)
+	->size() > 0
+*/]
+
+[query public isPrimitive(aClassifier : EClassifier) : Boolean =
+	aClassifier.eClass().name.equalsIgnoreCase('EDataType')
+	or aClassifier.name.equalsIgnoreCase('__EBigDecimal')
+	or aClassifier.name.equalsIgnoreCase('__EBoolean')
+	or aClassifier.name.equalsIgnoreCase('__EBooleanObject')
+	or aClassifier.name.equalsIgnoreCase('__EInt')
+	or aClassifier.name.equalsIgnoreCase('__EIntegerObject')
+	or aClassifier.name.equalsIgnoreCase('__EShortObject')
+	or aClassifier.name.equalsIgnoreCase('__EString')
+/]
+
+[query public isPrimitive(aAttribute : EAttribute) : Boolean =
+	aAttribute.eType.name.equalsIgnoreCase('EDataType')
+	or aAttribute.eType.name.equalsIgnoreCase('__EBigDecimal')
+	or aAttribute.eType.name.equalsIgnoreCase('__EBoolean')
+	or aAttribute.eType.name.equalsIgnoreCase('__EBooleanObject')
+	or aAttribute.eType.name.equalsIgnoreCase('__EInt')
+	or aAttribute.eType.name.equalsIgnoreCase('__EIntegerObject')
+	or aAttribute.eType.name.equalsIgnoreCase('__EShortObject')
+	or aAttribute.eType.name.equalsIgnoreCase('__EString')
+/]
+
+[query public isPrimitive(aReference : EReference) : Boolean =
+	aReference.eType.name.equalsIgnoreCase('EDataType')
+	or aReference.eType.name.equalsIgnoreCase('__EBigDecimal')
+	or aReference.eType.name.equalsIgnoreCase('__EBoolean')
+	or aReference.eType.name.equalsIgnoreCase('__EBooleanObject')
+	or aReference.eType.name.equalsIgnoreCase('__EInt')
+	or aReference.eType.name.equalsIgnoreCase('__EIntegerObject')
+	or aReference.eType.name.equalsIgnoreCase('__EShortObject')
+	or aReference.eType.name.equalsIgnoreCase('__EString')
+/]
+
+
+[query public isEnum(aAttribute : EAttribute) : Boolean =
+	aAttribute.eType.oclIsKindOf(EEnum)
+/]
+
+[query public isEnum(aClassifier : EClassifier) : Boolean =
+	aClassifier.oclIsKindOf(EEnum)
+/]
+
+[query public isEnum(aReference : EReference) : Boolean =
+	aReference.eType.oclIsKindOf(EEnum)
+/]
+
+[template public log(msg : String, msg2 : String)]
+[file ('stdout', true, 'Cp1252')]
+LOG: [msg2/][msg/]
+[/file]
+[/template]
+

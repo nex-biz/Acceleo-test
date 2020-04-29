@@ -5,7 +5,10 @@
 [module classJavaFileEcore('http://www.eclipse.org/emf/2002/Ecore')]
 
 [import fr::edf::rd::cs::acceleo::files::ecore::fileUtilsEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaCommonEcore /]
 [import fr::edf::rd::cs::acceleo::files::ecore::jpaAnnotationEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaRepositoryEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::attributeClassEcore /]
 
 
 [**
@@ -36,14 +39,16 @@ public [aClass.abstraction()/] interface [aClass.genNameForInterfaceClass()/][aC
 package [aClass.genPackageValue()/];
 
 [aClass.genDefaultImport()/]
+[aClass.genJpaAnnotImport()/]
 
 ['------------------------------'.log('')/]
 [aClass.name.log('')/]
 /**
- * The documentation of the class [aClass.genNameForInterfaceClass()/]
+ * The documentation of the class [aClass.genNameForConcreteClass()/]
  *
  * @generated
  */
+[aClass.genJpaAnnotEntity()/]
 public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.inheritanceForConcreteClass()/] implements [aClass.genNameForInterfaceClass()/] {
 
 	[aClass.fieldsForConcreteClass()/]
@@ -60,6 +65,9 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
 	[aClass.classBody(aPackage)/]
 }
 [/file]
+
+[aClass.genRepositoryJavaFile(aPackage)/]
+
 [/template]
 
 [template private classBody(aClass : EClassifier, aPackage : EPackage) post(trim())]
@@ -73,7 +81,7 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
 
 
 [template private abstraction(aClass : EClassifier)]
-[if (aClass.oclAsType( EClass ).abstract = true )]abstract[/if]
+[if ( false and aClass.oclAsType( EClass ).abstract = true )]abstract[/if]
 [/template]
 
 [template private inheritanceForConcreteClass(aClass : EClassifier)]
@@ -85,148 +93,14 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
 [/template]
 
 [template private extensionForConcreteClass(aClass : EClassifier)]
-[for (aSuperClass : EClass | aClass.oclAsType(EClass).eSuperTypes->select( not( name.startsWith( 'Ag' )))) before(' extends ') separator(', ')][aSuperClass.genNameForConcreteClass()/][/for]
+[if( aClass.oclAsType(EClass).eSuperTypes->select( est | not( est.name.startsWith('Ag') ) )->size() > 0 )]
+[for ( aSuperClass : EClass | aClass.oclAsType(EClass).eSuperTypes->select( not( name.startsWith( 'Ag' ) ) ) ) before(' extends ') separator(', ')][aSuperClass.genNameForConcreteClass()/][/for]
+[else]
+ extends RootObject 
+[/if]
 [/template]
 
 [template private implementedForConcreteClass(aClass : EClassifier)]
 [for (anInterface : EClass | aClass.oclAsType(EClass).eSuperTypes->select( aClass : EClass | aClass.interface )) before(' implements ') separator(', ')][anInterface.genNameForInterfaceClass()/][/for]
-[/template]
-
-[template private checkForbidenNameL(aName : EString)]
-[if (aName.equalsIgnoreCase('private'))]private_[elseif (aName.equalsIgnoreCase('transient'))]transient_[else][aName.toLowerFirst()/][/if]
-[/template]
-
-[template private checkForbidenNameU(aName : EString)]
-[if (aName.equalsIgnoreCase('private'))]Private_[elseif (aName.equalsIgnoreCase('transient'))]Transient_[else][aName.toUpperFirst()/][/if]
-[/template]
-
-[template private fieldsForConcreteClass(aClass : EClassifier)]
-[for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
-/**
- * The documentation of the attribute [aProperty.name.checkForbidenNameL()/].
- * 
- * @generated
- */
-private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/];
-
-[/for]
-[/template]
-
-
-
-[template private fieldsFromParentForConcreteClass(aClass : EClassifier)]
-[for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
-		[aSuperType.name.log(' aSuperType :')/]
-	[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
-		[aSuperType2.name.log('    aSuperType2 :')/]
-[aSuperType2.fieldsForConcreteClass()/]
-	[/for]
-[/for]
-[/template]
-
-
-
-[template private associationsForConcreteClass(aClass : EClassifier)]
-[for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
-/**
- * The documentation of the reference [aProperty.name.checkForbidenNameL()/].
- * 
- * @generated
- */
-private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/];
-
-[/for]
-[/template]
-
-[template private fieldsAccessorsForConcreteClass(aClass : EClassifier)]
-[for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
-/**
- * The documentation of the getter get[aProperty.name.checkForbidenNameU()/].
- * 
- * @generated
- */
-public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
-	return this.[aProperty.name.checkForbidenNameL()/];
-}
-
-/**
- * The documentation of the setter set[aProperty.name.checkForbidenNameU()/].
- * 
- * @generated
- */
-public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
-	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
-}
-
-[/for]
-[/template]
-
-
-[template private fieldsAccessorsFromParentForConcreteClass(aClass : EClassifier)]
-[for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
-[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
-[aSuperType2.fieldsAccessorsForConcreteClass()/]
-[/for]
-[/for]
-[/template]
-
-
-
-[template private associationsAccessorsForConcreteClass(aClass : EClassifier)]
-[for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
-/**
- * associations get[aProperty.name.checkForbidenNameU()/].
- * 
- * @generated
- */
-public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
-	return this.[aProperty.name.checkForbidenNameL()/];
-}
-
-/**
- * associations set[aProperty.name.checkForbidenNameU()/].
- * 
- * @generated
- */
-public void set[aProperty.name.toUpperFirst()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
-	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
-}
-
-[/for]
-[/template]
-
-
-[template private primitiveName(typeName : String)]
-[if (typeName.equalsIgnoreCase('EBigDecimal'))]java.math.BigDecimal[elseif (typeName.equalsIgnoreCase('EBoolean'))]Boolean[elseif (typeName.equalsIgnoreCase('EBooleanObject'))]Boolean[elseif (typeName.equalsIgnoreCase('EFeatureMapEntry'))]EFeatureMapEntry[elseif (typeName.equalsIgnoreCase('EInt'))]Integer[elseif (typeName.equalsIgnoreCase('EIntegerObject'))]Integer[elseif (typeName.equalsIgnoreCase('EShortObject'))]Short[elseif (typeName.equalsIgnoreCase('EString'))]String[else][typeName/][/if]
-[/template]
-
-[template private isPrimitive(aClassifier : EClassifier)]
-[if (aClassifier.eClass().name.equalsIgnoreCase('EDataType')
-	or aClassifier.name.equalsIgnoreCase('EBigDecimal')
-	or aClassifier.name.equalsIgnoreCase('EBoolean')
-	or aClassifier.name.equalsIgnoreCase('EBooleanObject')
-	or aClassifier.name.equalsIgnoreCase('EFeatureMapEntry')
-	or aClassifier.name.equalsIgnoreCase('EInt')
-	or aClassifier.name.equalsIgnoreCase('EIntegerObject')
-	or aClassifier.name.equalsIgnoreCase('EShortObject')
-	or aClassifier.name.equalsIgnoreCase('EString'))]1[else]0[/if]
-[/template]
-
-
-[**
- * Generates the name of the type of attribute
- * @param aClass The class to be named.
- */]
-[template public genNameForAttribute(attr : EAttribute)]
-[if( attr.eType.isPrimitive().toInteger() = 1 )][attr.eType.name.primitiveName()/][elseif(attr.eType.oclIsKindOf(EEnum))][attr.eType.name.toUpperFirst()/][else]['I' + attr.eType.name.toUpperFirst()/][/if]
-[/template]
-
-
-[**
- * Generates the name of the type of attribute
- * @param aClass The class to be named.
- */]
-[template public genNameForAttribute(attr : EReference)]
-[if( attr.eType.isPrimitive() = true )][attr.eType.name.primitiveName()/][elseif(attr.eType.oclIsKindOf(EEnum))][attr.eType.name.toUpperFirst()/][else]['I' + attr.eType.name.toUpperFirst()/][/if]
 [/template]
 

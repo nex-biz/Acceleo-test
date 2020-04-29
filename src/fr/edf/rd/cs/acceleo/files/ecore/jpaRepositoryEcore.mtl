@@ -1,0 +1,43 @@
+[comment encoding = UTF-8 /]
+[module jpaRepositoryEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::properties::properties /]
+[import fr::edf::rd::cs::acceleo::files::ecore::fileUtilsEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaCommonEcore /]
+
+
+[**
+ * The documentation of the template genClassJavaFile.
+ * @param aClass
+ */]
+[template public genRepositoryJavaFile(aClass : EClassifier, aPackage : EPackage)]
+[if(aClass.isJpaEntityNeeded())]
+[file (aClass.genFilePathForRepositoryClass(), false, 'UTF-8')]
+package [aClass.genPackageValue()/].repositories;
+
+[aClass.genJpaRepositoryImport()/]
+/**
+ * The documentation of the class [aClass.name.toUpperFirst()/]
+ *
+ * @generated
+ */
+@Repository
+public interface I[aClass.name.toUpperFirst()/]JPAQueriesRepository extends JpaRepository<[aClass.name.toUpperFirst()/], Long> {
+
+}
+[/file]
+[/if]
+[/template]
+
+
+[template public genJpaRepositoryImport(aClassifier : EClassifier)]
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.*;
+['import ' + aClassifier.genPackageValue()/].[aClassifier.name.toUpperFirst() + ';'/]
+[/template]
+
+
+[template public genFilePathForRepositoryClass(aClassifier : EClassifier)]
+[aClassifier.getSourceFolder() + aClassifier.packagePath() + '/repositories/I' + aClassifier.name.toUpperFirst() + 'JPAQueriesRepository.java'/]
+[/template]
+
