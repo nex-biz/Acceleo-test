@@ -7,6 +7,7 @@
 [import fr::edf::rd::cs::acceleo::files::ecore::classJavaFileEcore /]
 [import fr::edf::rd::cs::acceleo::files::ecore::enumJavaFileEcore /]
 [import fr::edf::rd::cs::acceleo::files::ecore::interfaceJavaFileEcore /]
+[import fr::edf::rd::cs::acceleo::files::ecore::rootObjectEcore /]
 
 [**
  * This template is the entry point of the generation.
@@ -14,6 +15,7 @@
  */]
 [template public main( aPackage : EPackage )]
 [comment @main/]
+[genRootObjectClassFile()/]
 [for ( aClassifier : EClassifier | aPackage.eAllContents( EClassifier ) )]
 	[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)] 
 		[aClassifier.genClassJavaFile( aPackage )/]

@@ -1,0 +1,64 @@
+[comment encoding = UTF-8 /]
+[module rootObjectEcore('http://www.eclipse.org/emf/2002/Ecore')]
+
+[import fr::edf::rd::cs::acceleo::properties::properties /]
+
+[**
+ * The documentation of the template genClassJavaFile.
+ * @param aClass
+ */]
+[template public genRootObjectClassFile( oclAny : OclAny )]
+
+[file ('fr/edf/rd/cs/internal/entities/scl/RootObject.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl;
+
+import javax.persistence.*;
+
+@MappedSuperclass
+public abstract class RootObject {
+	
+	@Id
+	private String mRID;
+	
+	private String name;
+	
+	private String aliasName;
+	
+	private String description;
+	
+	public String getmRID() {
+		return mRID;
+	}
+
+	public void setmRID(String mRID) {
+		this.mRID = mRID;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getAliasName() {
+		return aliasName;
+	}
+
+	public void setAliasName(String aliasName) {
+		this.aliasName = aliasName;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+}
+
+[/file]
+[/template]
