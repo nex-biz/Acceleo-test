@@ -26,6 +26,10 @@ public abstract class RootObject {
 	
 	private String description;
 	
+	private String domain;
+
+	private String domain_mRID;
+
 	public String getmRID() {
 		return mRID;
 	}
@@ -57,7 +61,22 @@ public abstract class RootObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	public String getDomain_mRID() {
+		return domain_mRID;
+	}
+
+	public void setDomain_mRID(String domain_mRID) {
+		this.domain_mRID = domain_mRID;
+	}
 }
 
 [/file]
