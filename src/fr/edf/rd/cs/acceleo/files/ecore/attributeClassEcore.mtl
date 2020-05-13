@@ -22,6 +22,7 @@
 [template public fieldsForConcreteClass(aClass : EClassifier)]
 [for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+
 /**
  * The documentation of the attribute [aProperty.name.checkForbidenNameL()/].
  * 
@@ -50,13 +51,14 @@ private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aPrope
 [template public associationsForConcreteClass(aClass : EClassifier)]
 [for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+
 /**
  * The documentation of the reference [aProperty.name.checkForbidenNameL()/].
  * 
  * @generated
  */
 [aProperty.genJpaAnnotAttribute(aClass)/]
-private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/];
+private [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/][if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)] = new ArrayList<>()[/if];
 [/if]
 [/for]
 [/template]
@@ -66,6 +68,7 @@ private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aPrope
 [template public fieldsAccessorsForConcreteClass(aClass : EClassifier)]
 [for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+
 /**
  * The documentation of the getter get[aProperty.name.checkForbidenNameU()/].
  * 
@@ -101,12 +104,13 @@ public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound 
 [template public associationsAccessorsForConcreteClass(aClass : EClassifier)]
 [for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+
 /**
  * associations get[aProperty.name.checkForbidenNameU()/].
  * 
  * @generated
  */
-public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
+public [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
 	return this.[aProperty.name.checkForbidenNameL()/];
 }
 
@@ -115,7 +119,7 @@ public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProper
  * 
  * @generated
  */
-public void set[aProperty.name.toUpperFirst()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
+public void set[aProperty.name.toUpperFirst()/]([if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
 	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
 }
 [/if]
