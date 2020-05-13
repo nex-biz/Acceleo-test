@@ -21,8 +21,7 @@ package [aClass.genPackageValue()/].repositories;
  *
  * @generated
  */
-@Repository
-public interface I[aClass.name.toUpperFirst()/]JPAQueriesRepository extends JpaRepository<[aClass.name.toUpperFirst()/], Long> {
+[aClass.name.genJpaAnnotRepository()/]
 
 }
 [/file]
