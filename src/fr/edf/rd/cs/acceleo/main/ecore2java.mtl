@@ -15,7 +15,7 @@
  */]
 [template public main( aPackage : EPackage )]
 [comment @main/]
-[genRootObjectClassFile()/]
+[genClassFiles()/]
 [for ( aClassifier : EClassifier | aPackage.eAllContents( EClassifier ) )]
 	[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)] 
 		[aClassifier.genClassJavaFile( aPackage )/]
