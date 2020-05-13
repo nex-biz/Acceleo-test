@@ -3,16 +3,30 @@
 
 [import fr::edf::rd::cs::acceleo::properties::properties /]
 
+[template public genClassFiles( oclAny : OclAny )]
+[genRootObjectClassFile()/]
+[genObjectCardinalityClassFile()/]
+[genInterfaceClassFile('ObjectCardinality')/]
+[genInterfaceClassJPAQueriesRepositoryFile('ObjectCardinality')/]
+[genDomainEnumFile()/]
+[genClassFile('OTLibrary')/]
+[genClassFile('SpecificationProject')/]
+[genInterfaceClassFile('OTLibrary')/]
+[genInterfaceClassFile('SpecificationProject')/]
+[genInterfaceClassJPAQueriesRepositoryFile('OTLibrary')/]
+[genInterfaceClassJPAQueriesRepositoryFile('SpecificationProject')/]
+[/template]
+
 [**
  * The documentation of the template genClassJavaFile.
  * @param aClass
  */]
 [template public genRootObjectClassFile( oclAny : OclAny )]
-
 [file ('fr/edf/rd/cs/internal/entities/scl/RootObject.java', false, 'UTF-8')]
 package fr.edf.rd.cs.internal.entities.scl;
 
 import javax.persistence.*;
+import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
 
 @MappedSuperclass
 public abstract class RootObject {
@@ -26,7 +40,9 @@ public abstract class RootObject {
 	
 	private String description;
 	
-	private String domain;
+	@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
+
+	private DomainEnum domain;
 
 	private String domain_mRID;
 
@@ -62,11 +78,11 @@ public abstract class RootObject {
 		this.description = description;
 	}
 
-	public String getDomain() {
+	public DomainEnum getDomain() {
 		return domain;
 	}
 
-	public void setDomain(String domain) {
+	public void setDomain(DomainEnum domain) {
 		this.domain = domain;
 	}
 
@@ -78,6 +94,175 @@ public abstract class RootObject {
 		this.domain_mRID = domain_mRID;
 	}
 }
-
 [/file]
 [/template]
+
+[template public genDomainEnumFile( oclAny : OclAny )]
+[file ('fr/edf/rd/cs/internal/entities/scl/DomainEnum.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl;
+public enum DomainEnum {
+	/**
+	 * The documentation of the enumeration literal LIBRARY.
+	 * 
+	 * @generated
+	 */
+	LIBRARY,
+	
+	/**
+	 * The documentation of the enumeration literal PROJECT.
+	 * 
+	 * @generated
+	 */
+	PROJECT
+}
+[/file]
+[/template]
+
+[template public genObjectCardinalityClassFile( oclAny : OclAny )]
+[file ('fr/edf/rd/cs/internal/entities/scl/ObjectCardinality.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl;
+
+import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
+
+import javax.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class ObjectCardinality extends RootObject 
+implements IObjectCardinality {
+	
+	private String mRIDSource;
+
+	private String mRIDTarget;
+	
+	private String nameSource;
+
+	private String nameTarget;
+
+	private String multiplicitySource;
+
+	private String multiplicityTarget;
+
+	public String getmRIDSource() {
+		return mRIDSource;
+	}
+
+	public void setmRIDSource(String mRIDSource) {
+		this.mRIDSource = mRIDSource;
+	}
+
+	public String getmRIDTarget() {
+		return mRIDTarget;
+	}
+
+	public void setmRIDTarget(String mRIDTarget) {
+		this.mRIDTarget = mRIDTarget;
+	}
+	
+	public String getNameSource() {
+		return nameSource;
+	}
+
+	public void setNameSource(String nameSource) {
+		this.nameSource = nameSource;
+	}
+
+	public String getNameTarget() {
+		return nameTarget;
+	}
+
+	public void setNameTarget(String nameTarget) {
+		this.nameTarget = nameTarget;
+	}
+
+	public String getMultiplicitySource() {
+		return multiplicitySource;
+	}
+
+	public void setMultiplicitySource(String multiplicitySource) {
+		this.multiplicitySource = multiplicitySource;
+	}
+
+	public String getMultiplicityTarget() {
+		return multiplicityTarget;
+	}
+
+	public void setMultiplicityTarget(String multiplicityTarget) {
+		this.multiplicityTarget = multiplicityTarget;
+	}
+
+}
+[/file]
+[/template]
+
+[template public genClassFile( oclAny : OclAny, aClassName: EString )]
+[file ('fr/edf/rd/cs/internal/entities/scl/' + aClassName + '.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl;
+
+import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
+import javax.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+
+public class [aClassName/] extends RootObject 
+implements I[aClassName/] {
+	
+[if(aClassName.equalsIgnoreCase('SpecificationProject'))]
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+[/if]
+[if(aClassName.equalsIgnoreCase('OTLibrary'))]
+	private String version;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+[/if]
+	
+}
+[/file]
+[/template]
+
+
+[template public genInterfaceClassFile( oclAny : OclAny, aClassName: EString )]
+[file ('fr/edf/rd/cs/internal/entities/scl/interfaces/I' + aClassName + '.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl.interfaces;
+
+import java.util.*;
+import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
+
+public  interface I[aClassName/] {
+
+}
+[/file]
+[/template]
+
+
+[template public genInterfaceClassJPAQueriesRepositoryFile( oclAny : OclAny, aClassName: EString )]
+[file ('fr/edf/rd/cs/internal/entities/scl/repositories/I' + aClassName + 'JPAQueriesRepository.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl.repositories;
+
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.*;
+import fr.edf.rd.cs.internal.entities.scl.[aClassName/];
+
+@Repository
+public interface I[aClassName/]JPAQueriesRepository extends JpaRepository<[aClassName/], Long> {
+
+
+}
+[/file]
+[/template]
+
