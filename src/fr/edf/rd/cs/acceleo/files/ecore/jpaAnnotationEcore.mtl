@@ -113,29 +113,6 @@ import javax.persistence.*;
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
 'unnaming','val','valuehandling','valuewithunit','voltage','voltagelevel'
-}->includes(aClassName.toLowerCase()))]
-@Transient
-[else]
-[if (Sequence{ 'abstractconductingequipment','abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
-'accesscontrol','accesspoint','address',
-'agauthentication','agdatrgop','agdesc','agldref','aglnref','agoptfields','agsmvopts','agvirtual',
-'anycontentfromothernamespace','anyln','association','authentication','baseelement','bda','bitrate','bitratennmbpersec',
-'cert','certificate','clientln','clientservices','commprot','communication',
-'confdataset','confldname','conflns','conflogcontrol','confreportcontrol','confsg','confsigref',
-'connectedap','control','controlblock','controlwithiedname','controlwithtriggeropt',
-'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','doi',
-'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
-'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
-'goose','goosedirectory','gse','gsecontrol','gsedir','gsesettings','gsse','header','history','hitem','idnaming','ied','iedname','inputs',
-'issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
-'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
-'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
-'rptenabled','sampledvaluecontrol','samplespersec','scl','sclobject','secpersamples','server','serverat','serviceconfreportcontrol',
-'serviceforconfdataset','services','servicesettings','servicewithmax','servicewithmaxandmaxattributes',
-'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
-'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
-'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit','voltage','voltagelevel'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -207,7 +184,6 @@ import javax.persistence.*;
 'unnaming','referstoval','referstovaluehandling','referstovaluewithunit','referstovoltage','referstovoltagelevel'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
-[/if]
 [/if]
 [/if]
 [/if]
