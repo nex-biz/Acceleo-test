@@ -9,11 +9,11 @@
 [genInterfaceClassFile('ObjectCardinality')/]
 [genInterfaceClassJPAQueriesRepositoryFile('ObjectCardinality')/]
 [genDomainEnumFile()/]
-[genClassFile('OTLibrary')/]
+[genClassFile('TypicalObjectLibrary')/]
 [genClassFile('SpecificationProject')/]
-[genInterfaceClassFile('OTLibrary')/]
+[genInterfaceClassFile('TypicalObjectLibrary')/]
 [genInterfaceClassFile('SpecificationProject')/]
-[genInterfaceClassJPAQueriesRepositoryFile('OTLibrary')/]
+[genInterfaceClassJPAQueriesRepositoryFile('TypicalObjectLibrary')/]
 [genInterfaceClassJPAQueriesRepositoryFile('SpecificationProject')/]
 [/template]
 
@@ -210,6 +210,7 @@ implements I[aClassName/] {
 	
 [if(aClassName.equalsIgnoreCase('SpecificationProject'))]
 	private String status;
+	private String creator;
 
 	public String getStatus() {
 		return status;
@@ -218,8 +219,15 @@ implements I[aClassName/] {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
 [/if]
-[if(aClassName.equalsIgnoreCase('OTLibrary'))]
+[if(aClassName.equalsIgnoreCase('TypicalObjectLibrary'))]
 	private String version;
 
 	public String getVersion() {
