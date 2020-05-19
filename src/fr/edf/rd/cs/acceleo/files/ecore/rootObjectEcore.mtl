@@ -267,7 +267,7 @@ import org.springframework.stereotype.*;
 import fr.edf.rd.cs.internal.entities.scl.[aClassName/];
 
 @Repository
-public interface I[aClassName/]JPAQueriesRepository extends JpaRepository<[aClassName/], Long> {
+public interface I[aClassName/]JPAQueriesRepository extends JpaRepository<[aClassName/], String> {
 
 
 }
