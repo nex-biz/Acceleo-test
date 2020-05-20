@@ -15,6 +15,7 @@
 [genInterfaceClassFile('SpecificationProject')/]
 [genInterfaceClassJPAQueriesRepositoryFile('TypicalObjectLibrary')/]
 [genInterfaceClassJPAQueriesRepositoryFile('SpecificationProject')/]
+[genInterfaceClassJPAQueriesRepositoryFile('RootObject')/]
 [/template]
 
 [**
@@ -44,7 +45,7 @@ public abstract class RootObject {
 
 	private DomainEnum domain;
 
-	private String domain_mRID;
+	private String mRIDDomain;
 
 	public String getmRID() {
 		return mRID;
@@ -86,12 +87,12 @@ public abstract class RootObject {
 		this.domain = domain;
 	}
 
-	public String getDomain_mRID() {
-		return domain_mRID;
+	public String getMRIDDomain() {
+		return mRIDDomain;
 	}
 
-	public void setDomain_mRID(String domain_mRID) {
-		this.domain_mRID = domain_mRID;
+	public void setMRIDDomain(String mRIDDomain) {
+		this.mRIDDomain = mRIDDomain;
 	}
 }
 [/file]
@@ -201,6 +202,8 @@ package fr.edf.rd.cs.internal.entities.scl;
 
 import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -210,7 +213,12 @@ implements I[aClassName/] {
 	
 [if(aClassName.equalsIgnoreCase('SpecificationProject'))]
 	private String status;
+
 	private String creator;
+
+		@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private List<TypicalObjectLibrary> refersToTypicalObjectLibrary = new ArrayList<>();
+
 
 	public String getStatus() {
 		return status;
@@ -226,9 +234,22 @@ implements I[aClassName/] {
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
+
+	public List<TypicalObjectLibrary> getRefersToTypicalObjectLibrary() {
+		return this.refersToTypicalObjectLibrary;
+	}
+	
+	public void setRefersToTypicalObjectLibrary(List<TypicalObjectLibrary> newRefersToTypicalObjectLibrary) {
+		this.refersToTypicalObjectLibrary = newRefersToTypicalObjectLibrary;
+	}
+
+
 [/if]
 [if(aClassName.equalsIgnoreCase('TypicalObjectLibrary'))]
 	private String version;
+
+		@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private List<SpecificationProject> referredBySpecificationProject = new ArrayList<>();
 
 	public String getVersion() {
 		return version;
@@ -237,6 +258,16 @@ implements I[aClassName/] {
 	public void setVersion(String version) {
 		this.version = version;
 	}
+
+	public List<SpecificationProject> getReferredBySpecificationProject() {
+		return this.referredBySpecificationProject;
+	}
+	
+	public void setReferredBySpecificationProject(List<SpecificationProject> newReferredBySpecificationProject) {
+		this.referredBySpecificationProject = newReferredBySpecificationProject;
+	}
+
+
 [/if]
 	
 }
@@ -266,9 +297,22 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
 import fr.edf.rd.cs.internal.entities.scl.[aClassName/];
 
-@Repository
-public interface I[aClassName/]JPAQueriesRepository extends JpaRepository<[aClassName/], String> {
+[if(aClassName.equalsIgnoreCase('RootObject'))]
+import org.springframework.data.repository.NoRepositoryBean;
+import java.util.List;
 
+@NoRepositoryBean
+public interface IRootObjectJPAQueriesRepository<T> extends JpaRepository<T, String> {
+
+  @Query("SELECT tab FROM #{#entityName} tab " +
+          " WHERE mriddomain = ?1 ")
+  public List<T> findByMriddomain(String mriddomain);
+
+[else]
+@Repository
+public interface I[aClassName/]JPAQueriesRepository extends IRootObjectJPAQueriesRepository<[aClassName/]> {
+
+[/if]
 
 }
 [/file]
