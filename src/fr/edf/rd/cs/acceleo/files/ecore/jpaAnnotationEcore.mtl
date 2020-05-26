@@ -85,7 +85,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit','voltage','voltagelevel'
+'unnaming','val','valuehandling','valuewithunit','voltage'
 }->includes(aClassName.toLowerCase())))]
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -112,7 +112,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit','voltage','voltagelevel'
+'unnaming','val','valuehandling','valuewithunit','voltage'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -135,7 +135,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','parentservicewithmaxnonzero','parentservicewithoptionalmax','parentserviceyesno','parentsetdatasetvalue',
 'settingcontrol','parentsettinggroups','parentsgeedit','parentsmprate','parentsmv','parentsmvopts','parentsmvsc','parentsmvsecurity','parentsmvsettings',
 'subject','parentsubnetwork','parentsupsubscription','parentterminal','parenttext','parenttimeractivatedcontrol','parenttimesyncprot','parenttrgops',
-'unnaming','parentval','parentvaluehandling','parentvaluewithunit','parentvoltage','parentvoltagelevel'
+'unnaming','parentval','parentvaluehandling','parentvaluewithunit','parentvoltage'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -158,7 +158,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','referredbyservicewithmaxnonzero','referredbyservicewithoptionalmax','referredbyserviceyesno','referredbysetdatasetvalue',
 'settingcontrol','referredbysettinggroups','referredbysgeedit','referredbysmprate','referredbysmv','referredbysmvopts','referredbysmvsc','referredbysmvsecurity','referredbysmvsettings',
 'subject','referredbysubnetwork','referredbysupsubscription','referredbyterminal','referredbytext','referredbytimeractivatedcontrol','referredbytimesyncprot','referredbytrgops',
-'unnaming','referredbyval','referredbyvaluehandling','referredbyvaluewithunit','referredbyvoltage','referredbyvoltagelevel'
+'unnaming','referredbyval','referredbyvaluehandling','referredbyvaluewithunit','referredbyvoltage'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -181,7 +181,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','referstoservicewithmaxnonzero','referstoservicewithoptionalmax','referstoserviceyesno','referstosetdatasetvalue',
 'settingcontrol','referstosettinggroups','referstosgeedit','referstosmprate','referstosmv','referstosmvopts','referstosmvsc','referstosmvsecurity','referstosmvsettings',
 'subject','referstosubnetwork','referstosupsubscription','referstoterminal','referstotext','referstotimeractivatedcontrol','referstotimesyncprot','referstotrgops',
-'unnaming','referstoval','referstovaluehandling','referstovaluewithunit','referstovoltage','referstovoltagelevel'
+'unnaming','referstoval','referstovaluehandling','referstovaluewithunit','referstovoltage'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [/if]
