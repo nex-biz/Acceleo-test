@@ -47,6 +47,26 @@ public abstract class RootObject {
 
 	private String mRIDDomain;
 
+    public RootObject() {
+        this.mRID = UUID.randomUUID().toString();
+    }
+
+    public RootObject(String mRID) {
+        this.mRID = mRID;
+    }
+
+    public RootObject(String mRIDDomain, DomainEnum domain) {
+        this();
+ 		this.mRIDDomain = mRIDDomain;
+ 		this.domain = domain;
+    }
+
+    public RootObject(String mRID, String mRIDDomain, DomainEnum domain) {
+        this.mRID = mRID;
+        this.mRIDDomain = mRIDDomain;
+        this.domain = domain;
+    }
+
 	public String getmRID() {
 		return mRID;
 	}

@@ -62,6 +62,27 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
 	public [aClass.genNameForConcreteClass()/]() {
 		super();
 	}
+    /**
+     * The documentation of the constructor.
+     *
+     * @generated
+     */
+    public [aClass.genNameForConcreteClass()/](String mRID) {
+        super(mRID);
+    }
+    /**
+     * The documentation of the constructor.
+     *
+     * @generated
+     */
+    public [aClass.genNameForConcreteClass()/](String mRIDDomain, DomainEnum domain) {
+        super(mRIDDomain, domain);
+    }
+    /**
+     * The documentation of the constructor.
+     *
+     * @generated
+     */
 	[aClass.classBody(aPackage)/]
 }
 [/file]

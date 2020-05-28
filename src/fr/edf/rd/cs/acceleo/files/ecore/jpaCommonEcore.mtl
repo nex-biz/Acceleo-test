@@ -88,7 +88,7 @@
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit','voltage'
+'unnaming','val','valuehandling','valuewithunit'
 }->includes(aClassName.toLowerCase()))]
 public interface I[aClassName.toUpperFirst()/]JPAQueriesRepository {
 [else]

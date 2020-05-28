@@ -8,7 +8,7 @@
 
 [template public genJpaAnnotEntity(aClass : EClassifier)]
 [if(aClass.isJpaEntityNeeded())]
-[aClass.name.genJpaAnnotEntity()/]
+[aClass.genJpaAnnotClassEntity()/]
 [if(aClass.name.equalsIgnoreCase('DO'))]
 @Table(name = "DO_TABLE")
 [/if]
@@ -65,7 +65,7 @@ import javax.persistence.*;
 [/if]
 [/template]
 
-[template public genJpaAnnotEntity(aClassName : EString)]
+[template public genJpaAnnotClassEntity(aClass : EClassifier)]
 [if (not(Sequence{ 'abstractconductingequipment','abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
 'accesscontrol','accesspoint','address',
 'agauthentication','agdatrgop','agdesc','agldref','aglnref','agoptfields','agsmvopts','agvirtual',
@@ -85,10 +85,12 @@ import javax.persistence.*;
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit','voltage'
-}->includes(aClassName.toLowerCase())))]
+'unnaming','val','valuehandling','valuewithunit'
+}->includes(aClass.name.toLowerCase())))]
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+[else]
+	[aClass.genJpaAnnotMappedSuperclass()/]
 [/if]
 [/template]
 
@@ -112,7 +114,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit','voltage'
+'unnaming','val','valuehandling','valuewithunit'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -136,7 +138,7 @@ import javax.persistence.*;
 'parentservicewithmaxandmodify','parentservicewithmaxnonzero','parentservicewithoptionalmax','parentserviceyesno','parentsetdatasetvalue',
 'parentsettingcontrol','parentsettinggroups','parentsgeedit','parentsmprate','parentsmv','parentsmvopts','parentsmvsc','parentsmvsecurity','parentsmvsettings',
 'parentsubject','parentsubnetwork','parentsupsubscription','parentterminal','parenttext','parenttimeractivatedcontrol','parenttimesyncprot','parenttrgops',
-'parentunnaming','parentval','parentvaluehandling','parentvaluewithunit','parentvoltage'
+'parentunnaming','parentval','parentvaluehandling','parentvaluewithunit'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -160,7 +162,7 @@ import javax.persistence.*;
 'referredbyservicewithmaxandmodify','referredbyservicewithmaxnonzero','referredbyservicewithoptionalmax','referredbyserviceyesno','referredbysetdatasetvalue',
 'referredbysettingcontrol','referredbysettinggroups','referredbysgeedit','referredbysmprate','referredbysmv','referredbysmvopts','referredbysmvsc','referredbysmvsecurity','referredbysmvsettings',
 'referredbysubject','referredbysubnetwork','referredbysupsubscription','referredbyterminal','referredbytext','referredbytimeractivatedcontrol','referredbytimesyncprot','referredbytrgops',
-'referredbyunnaming','referredbyval','referredbyvaluehandling','referredbyvaluewithunit','referredbyvoltage'
+'referredbyunnaming','referredbyval','referredbyvaluehandling','referredbyvaluewithunit'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [else]
@@ -184,7 +186,7 @@ import javax.persistence.*;
 'referstoservicewithmaxandmodify','referstoservicewithmaxnonzero','referstoservicewithoptionalmax','referstoserviceyesno','referstosetdatasetvalue',
 'referstosettingcontrol','referstosettinggroups','referstosgeedit','referstosmprate','referstosmv','referstosmvopts','referstosmvsc','referstosmvsecurity','referstosmvsettings',
 'referstosubject','referstosubnetwork','referstosupsubscription','referstoterminal','referstotext','referstotimeractivatedcontrol','referstotimesyncprot','referstotrgops',
-'referstounnaming','referstoval','referstovaluehandling','referstovaluewithunit','referstovoltage'
+'referstounnaming','referstoval','referstovaluehandling','referstovaluewithunit'
 }->includes(aAttributeName.toLowerCase()))]
 @Transient
 [/if]
@@ -193,4 +195,15 @@ import javax.persistence.*;
 [/if]
 [/template]
 
+[template public genJpaAnnotMappedSuperclass(aClass : EClassifier)]
+[aClass.name.log('genJpaAnnotMappedSuperclass ')/]
+	[for ( aClassifier : EClassifier | aClass.ancestors(EPackage).eAllContents(EClassifier) )]
+		[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)] 
+			[if (aClassifier.name.equalsIgnoreCase(aClass.name))]
+[aClassifier.name.log('ancestors ')/]
+	@MappedSuperclass
+			[/if]
+		[/if]
+	[/for]
+[/template]
 
