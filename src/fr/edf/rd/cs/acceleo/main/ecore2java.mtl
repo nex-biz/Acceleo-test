@@ -15,7 +15,7 @@
  */]
 [template public main( aPackage : EPackage )]
 [comment @main/]
-[genClassFiles()/]
+[comment genClassFiles()/]
 [for ( aClassifier : EClassifier | aPackage.eAllContents( EClassifier ) )]
 	[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)] 
 		[aClassifier.genClassJavaFile( aPackage )/]
@@ -25,5 +25,6 @@
 		[aClassifier.genEnumJavaFile()/]
 	[/if]
 [/for]
+[genClassFiles()/]
 [/template]
 

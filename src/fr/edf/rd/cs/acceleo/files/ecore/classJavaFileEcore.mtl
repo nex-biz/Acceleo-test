@@ -16,6 +16,7 @@
  * @param aClass
  */]
 [template public genClassJavaFile(aClass : EClassifier, aPackage : EPackage)]
+
 [file (aClass.genFilePathForInterfaceClass(), false, 'UTF-8')]
 [aClass.genCopyrightHeader()/]
 package [aClass.genPackageValue()/].interfaces;
@@ -75,7 +76,7 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
      *
      * @generated
      */
-    public [aClass.genNameForConcreteClass()/](String mRIDDomain, DomainEnum domain) {
+    public [aClass.genNameForConcreteClass()/](String mRIDDomain, DomainKindEnum domain) {
         super(mRIDDomain, domain);
     }
     /**
@@ -83,12 +84,14 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
      *
      * @generated
      */
-	[aClass.classBody(aPackage)/]
+    public [aClass.genNameForConcreteClass()/](String mRID, String mRIDDomain, DomainKindEnum domain) {
+        super(mRID, mRIDDomain, domain);
+    }
+    [aClass.classBody(aPackage)/]
 }
 [/file]
 
 [aClass.genRepositoryJavaFile(aPackage)/]
-
 [/template]
 
 [template private classBody(aClass : EClassifier, aPackage : EPackage) post(trim())]

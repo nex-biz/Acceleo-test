@@ -5,17 +5,25 @@
 
 [template public genClassFiles( oclAny : OclAny )]
 [genRootObjectClassFile()/]
-[genObjectCardinalityClassFile()/]
-[genInterfaceClassFile('ObjectCardinality')/]
+[comment genObjectCardinalityClassFile()/]
+[comment genInterfaceClassFile('ObjectCardinality')/]
 [genInterfaceClassJPAQueriesRepositoryFile('ObjectCardinality')/]
-[genDomainEnumFile()/]
-[genClassFile('TypicalObjectLibrary')/]
-[genClassFile('SpecificationProject')/]
-[genInterfaceClassFile('TypicalObjectLibrary')/]
-[genInterfaceClassFile('SpecificationProject')/]
-[genInterfaceClassJPAQueriesRepositoryFile('TypicalObjectLibrary')/]
-[genInterfaceClassJPAQueriesRepositoryFile('SpecificationProject')/]
+[comment  genClassFile('SystemOrSubstation')/]
+[comment  genInterfaceClassFile('SystemOrSubstation')/]
+[genInterfaceClassJPAQueriesRepositoryFile('SystemOrSubstation')/]
+[comment genClassFile('TypicalObjectLibrary')/]
+[comment genInterfaceClassFile('TypicalObjectLibrary')/]
+[comment genInterfaceClassJPAQueriesRepositoryFile('TypicalObjectLibrary')/]
+[comment genClassFile('SpecificationProject')/]
+[comment genInterfaceClassFile('SpecificationProject')/]
+[comment genInterfaceClassJPAQueriesRepositoryFile('SpecificationProject')/]
+[comment genClassFile('RevisionHistory')/]
+[comment genInterfaceClassFile('RevisionHistory')/]
+[genInterfaceClassJPAQueriesRepositoryFile('RevisionHistory')/]
 [genInterfaceClassJPAQueriesRepositoryFile('RootObject')/]
+[comment genDomainKindEnumFile()/]
+[genProjectStatusEnumFile()/]
+
 [/template]
 
 [**
@@ -23,29 +31,33 @@
  * @param aClass
  */]
 [template public genRootObjectClassFile( oclAny : OclAny )]
-[file ('fr/edf/rd/cs/internal/entities/scl/RootObject.java', false, 'UTF-8')]
+[file ('fr/edf/rd/cs/internal/entities/scl/RootObject.java', true, 'UTF-8')]
 package fr.edf.rd.cs.internal.entities.scl;
 
 import javax.persistence.*;
+import java.util.*;
 import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
+import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class RootObject {
+public abstract class RootObject implements Serializable {
 	
 	@Id
 	private String mRID;
-	
+
+	private String mRIDDomain;
+
 	private String name;
 	
 	private String aliasName;
-	
+
 	private String description;
-	
+
 	@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
 
-	private DomainEnum domain;
+	private DomainKindEnum domain;
 
-	private String mRIDDomain;
+    private String implementsTypicalObject;
 
     public RootObject() {
         this.mRID = UUID.randomUUID().toString();
@@ -55,23 +67,28 @@ public abstract class RootObject {
         this.mRID = mRID;
     }
 
-    public RootObject(String mRIDDomain, DomainEnum domain) {
+    public RootObject(String mRIDDomain, DomainKindEnum domain) {
         this();
  		this.mRIDDomain = mRIDDomain;
  		this.domain = domain;
     }
 
-    public RootObject(String mRID, String mRIDDomain, DomainEnum domain) {
-        this.mRID = mRID;
+    public RootObject(String mRID, String mRIDDomain, DomainKindEnum domain) {
+        if(mRID==null) mRID = UUID.randomUUID().toString();
+		this.mRID = mRID;
+        if(domain == DomainKindEnum.LIBRARY_MODEL) {
+			this.mRID = this.mRID + "__" + mRIDDomain;
+		}
         this.mRIDDomain = mRIDDomain;
         this.domain = domain;
     }
 
-	public String getmRID() {
-		return mRID;
+	public String getMRID() {
+        String['['/][']'/]strmRID = mRID.split("__");
+		return strmRID['['/]0[']'/];
 	}
 
-	public void setmRID(String mRID) {
+	public void setMRID(String mRID) {
 		this.mRID = mRID;
 	}
 	
@@ -99,11 +116,11 @@ public abstract class RootObject {
 		this.description = description;
 	}
 
-	public DomainEnum getDomain() {
+	public DomainKindEnum getDomain() {
 		return domain;
 	}
 
-	public void setDomain(DomainEnum domain) {
+	public void setDomain(DomainKindEnum domain) {
 		this.domain = domain;
 	}
 
@@ -114,14 +131,29 @@ public abstract class RootObject {
 	public void setMRIDDomain(String mRIDDomain) {
 		this.mRIDDomain = mRIDDomain;
 	}
+
+    public String getImplementsTypicalObject() {
+        return implementsTypicalObject;
+    }
+
+    public void setImplementsTypicalObject(String implementsTypicalObject) {
+        this.implementsTypicalObject = implementsTypicalObject;
+    }
 }
 [/file]
 [/template]
 
-[template public genDomainEnumFile( oclAny : OclAny )]
-[file ('fr/edf/rd/cs/internal/entities/scl/DomainEnum.java', false, 'UTF-8')]
+[template public genDomainKindEnumFile( oclAny : OclAny )]
+[file ('fr/edf/rd/cs/internal/entities/scl/DomainKindEnum.java', false, 'UTF-8')]
 package fr.edf.rd.cs.internal.entities.scl;
-public enum DomainEnum {
+public enum DomainKindEnum {
+	/**
+	 * The documentation of the enumeration literal LIBRARYMODEL.
+	 *
+	 * @generated
+	 */
+	 LIBRARY_MODEL,
+
 	/**
 	 * The documentation of the enumeration literal LIBRARY.
 	 * 
@@ -135,6 +167,41 @@ public enum DomainEnum {
 	 * @generated
 	 */
 	PROJECT
+}
+[/file]
+[/template]
+
+[template public genProjectStatusEnumFile( oclAny : OclAny )]
+[file ('fr/edf/rd/cs/internal/entities/scl/ProjectStatusEnum.java', false, 'UTF-8')]
+package fr.edf.rd.cs.internal.entities.scl;
+public enum ProjectStatusEnum {
+	/**
+	 * The documentation of the enumeration literal INITIALIZED.
+	 *
+	 * @generated
+	 */
+	INITIALIZED,
+
+	/**
+	 * The documentation of the enumeration literal DRAFT.
+	 *
+	 * @generated
+	 */
+	DRAFT,
+
+	/**
+	 * The documentation of the enumeration literal VALIDATED.
+	 *
+	 * @generated
+	 */
+	VALIDATED,
+
+    /**
+     * The documentation of the enumeration literal DEPRECATED.
+     *
+     * @generated
+     */
+    DEPRECATED
 }
 [/file]
 [/template]
@@ -164,19 +231,35 @@ implements IObjectCardinality {
 
 	private String multiplicityTarget;
 
-	public String getmRIDSource() {
+	public ObjectCardinality() {
+		super();
+	}
+
+    public ObjectCardinality(String mRID) {
+        super(mRID);
+    }
+
+    public ObjectCardinality(String mRIDDomain, DomainKindEnum domain) {
+        super(mRIDDomain, domain);
+    }
+
+    public ObjectCardinality(String mRID, String mRIDDomain, DomainKindEnum domain) {
+        super(mRID, mRIDDomain, domain);
+    }
+
+	public String getMRIDSource() {
 		return mRIDSource;
 	}
 
-	public void setmRIDSource(String mRIDSource) {
+	public void setMRIDSource(String mRIDSource) {
 		this.mRIDSource = mRIDSource;
 	}
 
-	public String getmRIDTarget() {
+	public String getMRIDTarget() {
 		return mRIDTarget;
 	}
 
-	public void setmRIDTarget(String mRIDTarget) {
+	public void setMRIDTarget(String mRIDTarget) {
 		this.mRIDTarget = mRIDTarget;
 	}
 	
@@ -224,36 +307,93 @@ import fr.edf.rd.cs.internal.entities.scl.interfaces.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
 public class [aClassName/] extends RootObject 
 implements I[aClassName/] {
-	
+
+[if(aClassName.equalsIgnoreCase('SystemOrSubstation'))]
+
+	private String region;
+
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private List<SpecificationProject> specificationProject = new ArrayList<>();
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+    public List<SpecificationProject> getSpecificationProject() {
+    	return this.specificationProject;
+    }
+
+    public void setSpecificationProject(List<SpecificationProject> newSpecificationProject) {
+    	this.specificationProject = newSpecificationProject;
+    }
+
+[/if]
+
 [if(aClassName.equalsIgnoreCase('SpecificationProject'))]
-	private String status;
 
-	private String creator;
+    private Date creationDate;
 
-		@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private String revision;
+
+	@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
+	private ProjectStatusEnum status;
+
+	private String version;
+
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound 1 : oppositeUpperBound -1
+	private List<SystemOrSubstation> parentSystemOrSubstation = new ArrayList<>();
+
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
 	private List<TypicalObjectLibrary> refersToTypicalObjectLibrary = new ArrayList<>();
 
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private List<Substation> substation = new ArrayList<>();
 
-	public String getStatus() {
-		return status;
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private List<RevisionHistory> revisionHistory = new ArrayList<>();
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+	public String getRevision() {
+		return revision;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getCreator() {
-		return creator;
+	public void setRevision(String revision) {
+		this.revision = revision;
 	}
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+    public ProjectStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProjectStatusEnum status) {
+        this.status = status;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
 	public List<TypicalObjectLibrary> getRefersToTypicalObjectLibrary() {
 		return this.refersToTypicalObjectLibrary;
@@ -263,21 +403,79 @@ implements I[aClassName/] {
 		this.refersToTypicalObjectLibrary = newRefersToTypicalObjectLibrary;
 	}
 
+    public List<Substation> getSubstation() {
+    	return this.substation;
+    }
+
+    public void setSubstation(List<Substation> newSubstation) {
+    	this.substation = newSubstation;
+    }
+
+    public List<SystemOrSubstation> getParentSystemOrSubstation() {
+    	return this.parentSystemOrSubstation;
+    }
+
+    public void setParentSystemOrSubstation(List<SystemOrSubstation> newParentSystemOrSubstation) {
+    	this.parentSystemOrSubstation = newParentSystemOrSubstation;
+    }
+
+    public List<RevisionHistory> getRevisionHistory() {
+        return this.revisionHistory;
+    }
+
+    public void setRevisionHistory(List<RevisionHistory> newRevisionHistory) {
+        this.revisionHistory = newRevisionHistory;
+    }
 
 [/if]
 [if(aClassName.equalsIgnoreCase('TypicalObjectLibrary'))]
+
+    private Date creationDate;
+
+	private String revision;
+
 	private String version;
 
-		@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
+	private ProjectStatusEnum status;
+
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
 	private List<SpecificationProject> referredBySpecificationProject = new ArrayList<>();
 
-	public String getVersion() {
-		return version;
+	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound -1 : oppositeUpperBound 1
+	private List<RevisionHistory> revisionHistory = new ArrayList<>();
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+	public String getRevision() {
+		return revision;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
+	public void setRevision(String revision) {
+		this.revision = revision;
 	}
+
+    public String getVersion() {
+    	return this.version;
+    }
+
+    public void setVersion(String newVersion) {
+    	this.version = newVersion;
+    }
+
+    public ProjectStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProjectStatusEnum status) {
+        this.status = status;
+    }
 
 	public List<SpecificationProject> getReferredBySpecificationProject() {
 		return this.referredBySpecificationProject;
@@ -287,9 +485,95 @@ implements I[aClassName/] {
 		this.referredBySpecificationProject = newReferredBySpecificationProject;
 	}
 
+    public List<RevisionHistory> getRevisionHistory() {
+        return this.revisionHistory;
+    }
+
+    public void setRevisionHistory(List<RevisionHistory> newRevisionHistory) {
+        this.revisionHistory = newRevisionHistory;
+    }
 
 [/if]
-	
+
+[if(aClassName.equalsIgnoreCase('RevisionHistory'))]
+
+	private String revision;
+
+	private String version;
+
+	private String what;
+
+	private String modificationDate;
+
+	private String who;
+
+	private String why;
+
+    public String getRevision() {
+    	return this.revision;
+    }
+
+    public void setRevision(String newRevision) {
+    	this.revision = newRevision;
+    }
+
+    public String getVersion() {
+    	return this.version;
+    }
+
+    public void setVersion(String newVersion) {
+    	this.version = newVersion;
+    }
+
+    public String getWhat() {
+    	return this.what;
+    }
+
+    public void setWhat(String newWhat) {
+    	this.what = newWhat;
+    }
+
+    public String getModificationDate() {
+    	return this.modificationDate;
+    }
+
+    public void setModificationDate(String newModificationDate) {
+    	this.modificationDate = newModificationDate;
+    }
+
+    public String getWho() {
+    	return this.who;
+    }
+
+     public void setWho(String newWho) {
+    	this.who = newWho;
+    }
+
+    public String getWhy() {
+    	return this.why;
+    }
+
+    public void setWhy(String newWhy) {
+    	this.why = newWhy;
+    }
+
+[/if]
+
+    public [aClassName/]() {
+        super();
+    }
+
+    public [aClassName/](String mRID) {
+        super(mRID);
+    }
+
+    public [aClassName/](String mRIDDomain, DomainKindEnum domain) {
+        super(mRIDDomain, domain);
+    }
+
+    public [aClassName/](String mRID, String mRIDDomain, DomainKindEnum domain) {
+        super(mRID, mRIDDomain, domain);
+    }
 }
 [/file]
 [/template]
@@ -310,7 +594,7 @@ public  interface I[aClassName/] {
 
 
 [template public genInterfaceClassJPAQueriesRepositoryFile( oclAny : OclAny, aClassName: EString )]
-[file ('fr/edf/rd/cs/internal/entities/scl/repositories/I' + aClassName + 'JPAQueriesRepository.java', false, 'UTF-8')]
+[file ('fr/edf/rd/cs/internal/entities/scl/repositories/I' + aClassName + 'JPAQueriesRepository.java', true, 'UTF-8')]
 package fr.edf.rd.cs.internal.entities.scl.repositories;
 
 import org.springframework.data.jpa.repository.*;
@@ -318,19 +602,51 @@ import org.springframework.stereotype.*;
 import fr.edf.rd.cs.internal.entities.scl.[aClassName/];
 
 [if(aClassName.equalsIgnoreCase('RootObject'))]
+import fr.edf.rd.cs.internal.entities.scl.DomainKindEnum;
 import org.springframework.data.repository.NoRepositoryBean;
 import java.util.List;
+import java.util.Optional;
 
 @NoRepositoryBean
 public interface IRootObjectJPAQueriesRepository<T> extends JpaRepository<T, String> {
 
   @Query("SELECT tab FROM #{#entityName} tab " +
+          " WHERE domain = ?1 ")
+  public List<T> findByDomain(DomainKindEnum domain);
+
+  @Query("SELECT tab FROM #{#entityName} tab " +
           " WHERE mriddomain = ?1 ")
   public List<T> findByMriddomain(String mriddomain);
 
+  @Query("SELECT tab FROM #{#entityName} tab " +
+          " WHERE substring(mrid,1,36) = ?1 AND mriddomain = ?2 ")
+  public Optional<T> findByMridAndByMriddomain(String mrid, String mriddomain);
+
 [else]
+[if(aClassName.equalsIgnoreCase('ObjectCardinality') or aClassName.equalsIgnoreCase('SystemOrSubstation') or aClassName.equalsIgnoreCase('RevisionHistory'))]
+import java.util.Optional;
+[/if]
+
 @Repository
 public interface I[aClassName/]JPAQueriesRepository extends IRootObjectJPAQueriesRepository<[aClassName/]> {
+
+[if(aClassName.equalsIgnoreCase('ObjectCardinality'))]
+  @Query("SELECT tab FROM #{#entityName} tab " +
+          " WHERE mridsource = ?1 AND mridtarget = ?2 AND mriddomain = ?3")
+  public Optional<ObjectCardinality> findByMridSourceAndByMridTargetAndByMriddomain(String mridsource, String mridtarget, String mriddomain);
+[/if]
+
+[if(aClassName.equalsIgnoreCase('SystemOrSubstation'))]
+  @Query("SELECT tab FROM #{#entityName} tab " +
+          " WHERE name = ?1 AND mriddomain = ?2")
+  public Optional<SystemOrSubstation> findByNameAndByMriddomain(String name, String mriddomain);
+[/if]
+
+[if(aClassName.equalsIgnoreCase('RevisionHistory'))]
+  @Query("SELECT tab FROM #{#entityName} tab " +
+          " WHERE version = ?1 AND revision = ?2 AND mriddomain = ?3")
+  public Optional<RevisionHistory> findByVersionAndByRevisionAndByMriddomain(String version, String revision, String mriddomain);
+[/if]
 
 [/if]
 

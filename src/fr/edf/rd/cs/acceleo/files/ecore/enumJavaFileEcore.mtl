@@ -23,11 +23,11 @@ package [anEnumeration.genPackageValue()/];
 public enum [anEnumeration.name.toUpperFirst()/] {
 	[for (anEnumerationLiteral : EEnumLiteral | anEnumeration.oclAsType( EEnum ).eLiterals)]
 	/**
-	 * The documentation of the enumeration literal [anEnumerationLiteral.name.toUpper()/].
+	 * The documentation of the enumeration literal [anEnumerationLiteral.name/].
 	 * 
 	 * @generated
 	 */
-	[anEnumerationLiteral.name.toUpper()/],
+	[anEnumerationLiteral.name/],
 	
 	[/for]
 }

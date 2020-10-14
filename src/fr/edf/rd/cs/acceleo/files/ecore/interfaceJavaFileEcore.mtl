@@ -10,6 +10,7 @@
 [template public genInterfaceJavaFile(anInterface : EClassifier)]
 [file (anInterface.genFilePath(''), false, 'UTF-8')]
 [anInterface.genCopyrightHeader()/]
+
 package [anInterface.genPackageValue()/];
 
 [anInterface.genDefaultImport()/]

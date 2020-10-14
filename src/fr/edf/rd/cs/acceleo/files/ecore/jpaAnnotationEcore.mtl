@@ -59,24 +59,44 @@ import javax.persistence.*;
 		[else]@Enumerated(javax.persistence.EnumType.STRING) // single Enumeration
 		[/if]
 	[else]
-[aClass.name.genJpaAnnotAttributeTransient(aProperty.name)/]
-	@ManyToMany(fetch = FetchType.LAZY) // multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[aClass.name.genJpaAnnotAttributeTransient(aProperty)/]
 	[/if]
 [/if]
 [/template]
 
+[template public genJpaAnnotAttributeManyToMany(aClassName : EString, aProperty : EReference)]
+
+[if(aProperty.name.toLower().equalsIgnoreCase('parentSDI'))]
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "subSDI") // multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[else]
+[if(aProperty.name.toLower().equalsIgnoreCase('parentSubFunction'))]
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "subSubFunctions") // multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[else]
+[if(aProperty.name.toLower().startsWith('parent'))]
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "[aClassName.toLowerFirst()/]") // multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[else]
+[if(aProperty.name.toLower().startsWith('referredby'))]
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "refersTo[aClassName/]") // multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[else]
+	@ManyToMany(fetch = FetchType.LAZY) // -- multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[/if]
+[/if]
+[/if]
+[/if]
+[/template]
+
 [template public genJpaAnnotClassEntity(aClass : EClassifier)]
-[if (not(Sequence{ 'abstractconductingequipment','abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
+[if (not(Sequence{ 'abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
 'accesscontrol','accesspoint','address',
 'agauthentication','agdatrgop','agdesc','agldref','aglnref','agoptfields','agsmvopts','agvirtual',
-'anycontentfromothernamespace','anyln','association','authentication','baseelement','bda','bitrate','bitratennmbpersec',
+'anycontentfromothernamespace','anyln','association','authentication','baseelement','bitrate','bitratennmbpersec',
 'cert','certificate','clientln','clientservices','commprot','communication',
 'confdataset','confldname','conflns','conflogcontrol','confreportcontrol','confsg','confsigref',
 'connectedap','control','controlblock','controlwithiedname','controlwithtriggeropt',
-'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','doi',
+'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','datetime','doi',
 'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
 'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
-'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','header','history','hitem','idnaming','ied',
+'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming','ied',
 'iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
 'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
 'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
@@ -84,28 +104,30 @@ import javax.persistence.*;
 'serviceforconfdataset','services','servicesettings','servicewithmax','servicewithmaxandmaxattributes',
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
-'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit'
+'subject','subnetwork','supsubscription','text','timeractivatedcontrol','timesyncprot','trgops',
+'unnaming','valuehandling','valuewithunit','rootobject','ecsproject'
 }->includes(aClass.name.toLowerCase())))]
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 [else]
-	[aClass.genJpaAnnotMappedSuperclass()/]
+	[comment aClass.genJpaAnnotMappedSuperclass()/]
+	@MappedSuperclass
 [/if]
+
 [/template]
 
-[template public genJpaAnnotAttributeTransient(aClassName : EString, aAttributeName : EString)]
-[if (Sequence{ 'abstractconductingequipment','abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
+[template public genJpaAnnotAttributeTransient(aClassName : EString, aProperty : EReference)]
+[if (Sequence{ 'abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
 'accesscontrol','accesspoint','address',
 'agauthentication','agdatrgop','agdesc','agldref','aglnref','agoptfields','agsmvopts','agvirtual',
-'anycontentfromothernamespace','anyln','association','authentication','baseelement','bda','bitrate','bitratennmbpersec',
+'anycontentfromothernamespace','anyln','association','authentication','baseelement','bitrate','bitratennmbpersec',
 'cert','certificate','clientln','clientservices','commprot','communication',
 'confdataset','confldname','conflns','conflogcontrol','confreportcontrol','confsg','confsigref',
 'connectedap','control','controlblock','controlwithiedname','controlwithtriggeropt',
-'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','doi',
+'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','datetime','doi',
 'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
 'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
-'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','header','history','hitem','idnaming',
+'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming',
 'ied','iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
 'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
 'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
@@ -113,23 +135,25 @@ import javax.persistence.*;
 'serviceforconfdataset','services','servicesettings','servicewithmax','servicewithmaxandmaxattributes',
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
-'subject','subnetwork','supsubscription','terminal','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','val','valuehandling','valuewithunit'
-}->includes(aAttributeName.toLowerCase()))]
+'subject','subnetwork','supsubscription','text','timeractivatedcontrol','timesyncprot','trgops',
+'unnaming','valuehandling','valuewithunit','rootobject','ecsproject'
+}->includes(aProperty.name.toLowerCase()))]
 @Transient
+	@ManyToMany(fetch = FetchType.LAZY) // -- multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+
 [else]
-[if (Sequence{ 'parentabstractconductingequipment','parentabstractdataattribute','parentabstractdataobject','parentabstracteqfuncsubfunc',
+[if (Sequence{ 'parentabstractdataattribute','parentabstractdataobject','parentabstracteqfuncsubfunc',
 'parentaccesscontrol','parentaccesspoint','parentaddress',
 'parentagauthentication','parentagdatrgop','parentagdesc','parentagldref','parentaglnref','parentagoptfields','parentagsmvopts','parentagvirtual',
-'parentanycontentfromothernamespace','parentanyln','parentassociation','parentauthentication','parentbaseelement','parentbda','parentbitrate','parentbitratennmbpersec',
+'parentanycontentfromothernamespace','parentanyln','parentassociation','parentauthentication','parentbaseelement','parentbitrate','parentbitratennmbpersec',
 'parentcert','parentcertificate','parentclientln','parentclientservices','parentcommprot','parentcommunication',
 'parentconfdataset','parentconfldname','parentconflns','parentconflogcontrol','parentconfreportcontrol','parentconfsg','parentconfsigref',
 'parentconnectedap','parentcontrol','parentcontrolblock','parentcontrolwithiedname','parentcontrolwithtriggeropt',
-'parentdai','parentdataobjectdirectory','parentdataset','parentdatasetdirectory','parentdatatypetemplates','parentdatatype','parentdoi',
+'parentdai','parentdataobjectdirectory','parentdataset','parentdatasetdirectory','parentdatatypetemplates','parentdatatype','parentdatetime','parentdoi',
 'parentdurationinmillisec','parentdurationinsec','parentdynassociation','parentdyndataset','parenteqfunction','parenteqsubfunction','parentequipment','parentequipmentcontainer','parentextref',
 'parentfcda','parentfilehandling','parentgeneralequipment','parentgeneralequipmentcontainer','parentgetcbvalue','parentgetdataobjectdefinition','parentgetdatasetvalue',
 'parentgetdirectory','parentgoose','parentgoosedirectory','parentgoosesecurity',
-'parentgse','parentgsecontrol','parentgsedir','parentgsesettings','parentgsse','parentheader','parenthistory','parenthitem','parentidnaming','parentied','parentiedname','parentinputs',
+'parentgse','parentgsecontrol','parentgsedir','parentgsesettings','parentgsse','parentguid','parentheader','parenthistory','parenthitem','parentidnaming','parentied','parentiedname','parentinputs',
 'parentissuername','parentkdc','parentldevice','parentline','parentln','parentln0','parentlnodecontainer',
 'vlog','parentlogcontrol','parentlogsettings','parentmaxtime','parentmcsecurity','parentmintime','parentneutralpoint','parentoptfields','parentp_physconn','parentp','parentpaddr',
 'parentphysconn','parentpowersystemresource','parentprivate','parentprocess','parentprotns','parentprotocol','parentreadwrite','parentreadprot','parentreportcontrol','parentreportsettings',
@@ -137,23 +161,24 @@ import javax.persistence.*;
 'parentserviceforconfdataset','parentservices','parentservicesettings','parentservicewithmax','parentservicewithmaxandmaxattributes',
 'parentservicewithmaxandmodify','parentservicewithmaxnonzero','parentservicewithoptionalmax','parentserviceyesno','parentsetdatasetvalue',
 'parentsettingcontrol','parentsettinggroups','parentsgeedit','parentsmprate','parentsmv','parentsmvopts','parentsmvsc','parentsmvsecurity','parentsmvsettings',
-'parentsubject','parentsubnetwork','parentsupsubscription','parentterminal','parenttext','parenttimeractivatedcontrol','parenttimesyncprot','parenttrgops',
-'parentunnaming','parentval','parentvaluehandling','parentvaluewithunit'
-}->includes(aAttributeName.toLowerCase()))]
+'parentsubject','parentsubnetwork','parentsupsubscription','parenttext','parenttimeractivatedcontrol','parenttimesyncprot','parenttrgops',
+'parentunnaming','parentvaluehandling','parentvaluewithunit','parentrootobject','parentecsproject'
+}->includes(aProperty.name.toLowerCase()))]
 @Transient
+	@ManyToMany(fetch = FetchType.LAZY) // -- multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
 [else]
-[if (Sequence{ 'referredbyabstractconductingequipment','referredbyabstractdataattribute','referredbyabstractdataobject','referredbyabstracteqfuncsubfunc',
+[if (Sequence{ 'referredbyabstractdataattribute','referredbyabstractdataobject','referredbyabstracteqfuncsubfunc',
 'referredbyaccesscontrol','referredbyaccesspoint','referredbyaddress',
 'referredbyagauthentication','referredbyagdatrgop','referredbyagdesc','referredbyagldref','referredbyaglnref','referredbyagoptfields','referredbyagsmvopts','referredbyagvirtual',
-'referredbyanycontentfromothernamespace','referredbyanyln','referredbyassociation','referredbyauthentication','referredbybaseelement','referredbybda','referredbybitrate','referredbybitratennmbpersec',
+'referredbyanycontentfromothernamespace','referredbyanyln','referredbyassociation','referredbyauthentication','referredbybaseelement','referredbybitrate','referredbybitratennmbpersec',
 'referredbycert','referredbycertificate','referredbyclientln','referredbyclientservices','referredbycommprot','referredbycommunication',
 'referredbyconfdataset','referredbyconfldname','referredbyconflns','referredbyconflogcontrol','referredbyconfreportcontrol','referredbyconfsg','referredbyconfsigref',
 'referredbyconnectedap','referredbycontrol','referredbycontrolblock','referredbycontrolwithiedname','referredbycontrolwithtriggeropt',
-'referredbydai','referredbydataobjectdirectory','referredbydataset','referredbydatasetdirectory','referredbydatatypetemplates','referredbydatatype','referredbydoi',
+'referredbydai','referredbydataobjectdirectory','referredbydataset','referredbydatasetdirectory','referredbydatatypetemplates','referredbydatatype','referredbydatetime','referredbydoi',
 'referredbydurationinmillisec','referredbydurationinsec','referredbydynassociation','referredbydyndataset','referredbyeqfunction','referredbyeqsubfunction','referredbyequipment','referredbyequipmentcontainer','referredbyextref',
 'referredbyfcda','referredbyfilehandling','referredbygeneralequipment','referredbygeneralequipmentcontainer','referredbygetcbvalue','referredbygetdataobjectdefinition',
 'referredbygetdatasetvalue','referredbygetdirectory','referredbygoose','referredbygoosedirectory','referredbygoosesecurity',
-'referredbygse','referredbygsecontrol','referredbygsedir','referredbygsesettings','referredbygsse','referredbyheader','referredbyhistory','referredbyhitem','referredbyidnaming','referredbyied','referredbyiedname','referredbyinputs',
+'referredbygse','referredbygsecontrol','referredbygsedir','referredbygsesettings','referredbygsse','referredbyguid','referredbyheader','referredbyhistory','referredbyhitem','referredbyidnaming','referredbyied','referredbyiedname','referredbyinputs',
 'referredbyissuername','referredbykdc','referredbyldevice','referredbyline','referredbyln','referredbyln0','referredbylnodecontainer',
 'referredbylog','referredbylogcontrol','referredbylogsettings','referredbymaxtime','referredbymcsecurity','referredbymintime','referredbyneutralpoint','referredbyoptfields','referredbyp_physconn','referredbyp','referredbypaddr',
 'referredbyphysconn','referredbypowersystemresource','referredbyprivate','referredbyprocess','referredbyprotns','referredbyprotocol','referredbyreadwrite','referredbyreadprot','referredbyreportcontrol','referredbyreportsettings',
@@ -161,23 +186,24 @@ import javax.persistence.*;
 'referredbyserviceforconfdataset','referredbyservices','referredbyservicesettings','referredbyservicewithmax','referredbyservicewithmaxandmaxattributes',
 'referredbyservicewithmaxandmodify','referredbyservicewithmaxnonzero','referredbyservicewithoptionalmax','referredbyserviceyesno','referredbysetdatasetvalue',
 'referredbysettingcontrol','referredbysettinggroups','referredbysgeedit','referredbysmprate','referredbysmv','referredbysmvopts','referredbysmvsc','referredbysmvsecurity','referredbysmvsettings',
-'referredbysubject','referredbysubnetwork','referredbysupsubscription','referredbyterminal','referredbytext','referredbytimeractivatedcontrol','referredbytimesyncprot','referredbytrgops',
-'referredbyunnaming','referredbyval','referredbyvaluehandling','referredbyvaluewithunit'
-}->includes(aAttributeName.toLowerCase()))]
+'referredbysubject','referredbysubnetwork','referredbysupsubscription','referredbytext','referredbytimeractivatedcontrol','referredbytimesyncprot','referredbytrgops',
+'referredbyunnaming','referredbyvaluehandling','referredbyvaluewithunit','referredbyrootobject','referredbyecsproject'
+}->includes(aProperty.name.toLowerCase()))]
 @Transient
+	@ManyToMany(fetch = FetchType.LAZY) // -- multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
 [else]
-[if (Sequence{ 'referstoabstractconductingequipment','referstoabstractdataattribute','referstoabstractdataobject','referstoabstracteqfuncsubfunc',
+[if (Sequence{ 'referstoabstractdataattribute','referstoabstractdataobject','referstoabstracteqfuncsubfunc',
 'referstoaccesscontrol','referstoaccesspoint','referstoaddress',
 'referstoagauthentication','referstoagdatrgop','referstoagdesc','referstoagldref','referstoaglnref','referstoagoptfields','referstoagsmvopts','referstoagvirtual',
-'referstoanycontentfromothernamespace','referstoanyln','referstoassociation','referstoauthentication','referstobaseelement','referstobda','referstobitrate','referstobitratennmbpersec',
+'referstoanycontentfromothernamespace','referstoanyln','referstoassociation','referstoauthentication','referstobaseelement','referstobitrate','referstobitratennmbpersec',
 'referstocert','referstocertificate','referstoclientln','referstoclientservices','referstocommprot','referstocommunication',
 'referstoconfdataset','referstoconfldname','referstoconflns','referstoconflogcontrol','referstoconfreportcontrol','referstoconfsg','referstoconfsigref',
 'referstoconnectedap','referstocontrol','referstocontrolblock','referstocontrolwithiedname','referstocontrolwithtriggeropt',
-'referstodai','referstodataobjectdirectory','referstodataset','referstodatasetdirectory','referstodatatypetemplates','referstodatatype','referstodoi',
+'referstodai','referstodataobjectdirectory','referstodataset','referstodatasetdirectory','referstodatatypetemplates','referstodatatype','referstodatetime','referstodoi',
 'referstodurationinmillisec','referstodurationinsec','referstodynassociation','referstodyndataset','referstoeqfunction','referstoeqsubfunction','referstoequipment','referstoequipmentcontainer','referstoextref',
 'referstofcda','referstofilehandling','referstogeneralequipment','referstogeneralequipmentcontainer','referstogetcbvalue','referstogetdataobjectdefinition','referstogetdatasetvalue',
 'referstogetdirectory','referstogoose','referstogoosedirectory','referstogoosesecurity',
-'referstogse','referstogsecontrol','referstogsedir','referstogsesettings','referstogsse','referstoheader','referstohistory','referstohitem','referstoidnaming','referstoied','referstoiedname','referstoinputs',
+'referstogse','referstogsecontrol','referstogsedir','referstogsesettings','referstogsse','referstoguid','referstoheader','referstohistory','referstohitem','referstoidnaming','referstoied','referstoiedname','referstoinputs',
 'referstoissuername','referstokdc','referstoldevice','referstoline','referstoln','referstoln0','referstolnodecontainer',
 'referstolog','referstologcontrol','referstologsettings','referstomaxtime','referstomcsecurity','referstomintime','referstoneutralpoint','referstooptfields','referstop_physconn','referstop','referstopaddr',
 'referstophysconn','referstopowersystemresource','referstoprivate','referstoprocess','referstoprotns','referstoprotocol','referstoreadwrite','referstoreadprot','referstoreportcontrol','referstoreportsettings',
@@ -185,10 +211,37 @@ import javax.persistence.*;
 'referstoserviceforconfdataset','referstoservices','referstoservicesettings','referstoservicewithmax','referstoservicewithmaxandmaxattributes',
 'referstoservicewithmaxandmodify','referstoservicewithmaxnonzero','referstoservicewithoptionalmax','referstoserviceyesno','referstosetdatasetvalue',
 'referstosettingcontrol','referstosettinggroups','referstosgeedit','referstosmprate','referstosmv','referstosmvopts','referstosmvsc','referstosmvsecurity','referstosmvsettings',
-'referstosubject','referstosubnetwork','referstosupsubscription','referstoterminal','referstotext','referstotimeractivatedcontrol','referstotimesyncprot','referstotrgops',
-'referstounnaming','referstoval','referstovaluehandling','referstovaluewithunit'
-}->includes(aAttributeName.toLowerCase()))]
+'referstosubject','referstosubnetwork','referstosupsubscription','referstotext','referstotimeractivatedcontrol','referstotimesyncprot','referstotrgops',
+'referstounnaming','referstovaluehandling','referstovaluewithunit','referstorootobject','referstoecsproject'
+}->includes(aProperty.name.toLowerCase()))]
 @Transient
+	@ManyToMany(fetch = FetchType.LAZY) // -- multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[else]
+[if (not(Sequence{ 'abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
+'accesscontrol','accesspoint','address',
+'agauthentication','agdatrgop','agdesc','agldref','aglnref','agoptfields','agsmvopts','agvirtual',
+'anycontentfromothernamespace','anyln','association','authentication','baseelement','bitrate','bitratennmbpersec',
+'cert','certificate','clientln','clientservices','commprot','communication',
+'confdataset','confldname','conflns','conflogcontrol','confreportcontrol','confsg','confsigref',
+'connectedap','control','controlblock','controlwithiedname','controlwithtriggeropt',
+'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','datetime','doi',
+'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
+'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
+'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming','ied',
+'iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
+'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
+'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
+'rptenabled','sampledvaluecontrol','samplespersec','scl','sclobject','secpersamples','server','serverat','serviceconfreportcontrol',
+'serviceforconfdataset','services','servicesettings','servicewithmax','servicewithmaxandmaxattributes',
+'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
+'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
+'subject','subnetwork','supsubscription','text','timeractivatedcontrol','timesyncprot','trgops',
+'unnaming','valuehandling','valuewithunit'
+}->includes(aClassName.toLowerCase())))]
+[aClassName.genJpaAnnotAttributeManyToMany(aProperty)/]
+[else]
+	@ManyToMany(fetch = FetchType.LAZY) // -- multiple Association  upperBound [aProperty.upperBound/] : oppositeUpperBound [aProperty.eOpposite.upperBound/]
+[/if]
 [/if]
 [/if]
 [/if]
@@ -198,7 +251,7 @@ import javax.persistence.*;
 [template public genJpaAnnotMappedSuperclass(aClass : EClassifier)]
 [aClass.name.log('genJpaAnnotMappedSuperclass ')/]
 	[for ( aClassifier : EClassifier | aClass.ancestors(EPackage).eAllContents(EClassifier) )]
-		[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)] 
+		[if (aClassifier.oclIsKindOf(EClass) and not aClassifier.oclAsType(EClass).interface)]
 			[if (aClassifier.name.equalsIgnoreCase(aClass.name))]
 [aClassifier.name.log('ancestors ')/]
 	@MappedSuperclass
@@ -206,4 +259,5 @@ import javax.persistence.*;
 		[/if]
 	[/for]
 [/template]
+
 

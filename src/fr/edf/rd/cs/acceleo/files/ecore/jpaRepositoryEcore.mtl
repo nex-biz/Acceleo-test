@@ -13,6 +13,7 @@
 [template public genRepositoryJavaFile(aClass : EClassifier, aPackage : EPackage)]
 [if(aClass.isJpaEntityNeeded())]
 [file (aClass.genFilePathForRepositoryClass(), false, 'UTF-8')]
+
 package [aClass.genPackageValue()/].repositories;
 
 [aClass.genJpaRepositoryImport()/]

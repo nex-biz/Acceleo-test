@@ -29,16 +29,20 @@
  * @generated
  */
 [aProperty.genJpaAnnotAttribute(aClass)/]
+[if(aProperty.name.equalsIgnoreCase('DESC'))]
+@Transient
+[/if]
 private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/];
 [/if]
 [/for]
-[/template]
 
+[/template]
 
 
 [template public fieldsFromParentForConcreteClass(aClass : EClassifier)]
 [for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
 		[aSuperType.name.log(' aSuperType :')/]
+		[aSuperType.fieldsForConcreteClass()/]
 	[for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
 		[aSuperType2.name.log('    aSuperType2 :')/]
 [aSuperType2.fieldsForConcreteClass()/]
@@ -54,7 +58,7 @@ private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aPrope
 
 /**
  * The documentation of the reference [aProperty.name.checkForbidenNameL()/].
- * 
+ *
  * @generated
  */
 [aProperty.genJpaAnnotAttribute(aClass)/]
@@ -71,7 +75,7 @@ private [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List
 
 /**
  * The documentation of the getter get[aProperty.name.checkForbidenNameU()/].
- * 
+ *
  * @generated
  */
 public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
@@ -80,7 +84,7 @@ public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProper
 
 /**
  * The documentation of the setter set[aProperty.name.checkForbidenNameU()/].
- * 
+ *
  * @generated
  */
 public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
@@ -88,11 +92,130 @@ public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound 
 }
 [/if]
 [/for]
+
+[if(aClass.name.equalsIgnoreCase('terminal'))]
+/**
+ * The documentation of the getter getElecConnectedTo.
+ *
+ * @generated
+ */
+  public String getElecConnectedTo() {
+     return this.elecConnectedTo;
+  }
+
+/**
+ * The documentation of the setter setElecConnectedTo.
+ *
+ * @generated
+ */
+ public void setElecConnectedTo(String elecConnectedTo) {
+    this.elecConnectedTo = elecConnectedTo;
+ }
+
+ /**
+  * The documentation of the getter isUsed.
+  *
+  * @generated
+  */
+   public Boolean isUsed() {
+      return this.used;
+   }
+
+ /**
+  * The documentation of the setter setUsed.
+  *
+  * @generated
+  */
+  public void setUsed(Boolean used) {
+     this.used = used;
+  }
+
+ [/if]
+
+[if(aClass.name.equalsIgnoreCase('bay'))]
+/**
+ * The documentation of the getter bayOrderNumbInSingleLineDiagram.
+ *
+ * @generated
+ */
+  public int getBayOrderNumbInSingleLineDiagram() {
+     return this.bayOrderNumbInSingleLineDiagram;
+  }
+
+/**
+ * The documentation of the setter bayOrderNumbInSingleLineDiagram.
+ *
+ * @generated
+ */
+ public void setBayOrderNumbInSingleLineDiagram(int bayOrderNumbInSingleLineDiagram) {
+    this.bayOrderNumbInSingleLineDiagram = bayOrderNumbInSingleLineDiagram;
+ }
+
+ /**
+  * The documentation of the getter busBar.
+  *
+  * @generated
+  */
+   public String getBusBar() {
+      return this.busBar;
+   }
+
+ /**
+  * The documentation of the setter busBar.
+  *
+  * @generated
+  */
+  public void setBusBar(String busBar) {
+     this.busBar = busBar;
+  }
+
+[/if]
+
+[if(aClass.name.equalsIgnoreCase('bay') or aClass.name.equalsIgnoreCase('powertransformer') or aClass.name.equalsIgnoreCase('transformerwinding') or aClass.name.equalsIgnoreCase('conductingequipment') or aClass.name.equalsIgnoreCase('voltagelevel') or aClass.name.equalsIgnoreCase('tapchanger') or aClass.name.equalsIgnoreCase('subequipment'))]
+/**
+ * The documentation of the getter xCoordinateInLibSchema.
+ *
+ * @generated
+ */
+  public float getXCoordinateInLibSchema() {
+     return this.xCoordinateInLibSchema;
+  }
+
+/**
+ * The documentation of the setter xCoordinateInLibSchema.
+ *
+ * @generated
+ */
+ public void setXCoordinateInLibSchema(float xCoordinateInLibSchema) {
+    this.xCoordinateInLibSchema = xCoordinateInLibSchema;
+ }
+
+ /**
+  * The documentation of the getter yCoordinateInLibSchema.
+  *
+  * @generated
+  */
+   public float getYCoordinateInLibSchema() {
+      return this.yCoordinateInLibSchema;
+   }
+
+ /**
+  * The documentation of the setter yCoordinateInLibSchema.
+  *
+  * @generated
+  */
+  public void setYCoordinateInLibSchema(float yCoordinateInLibSchema) {
+     this.yCoordinateInLibSchema = yCoordinateInLibSchema;
+  }
+
+[/if]
 [/template]
+
 
 
 [template public fieldsAccessorsFromParentForConcreteClass(aClass : EClassifier)]
 [for (aSuperType : EClass | aClass.oclAsType(EClass).eSuperTypes->select( var1 : EClass | var1.name.startsWith('Ag') ) )]
+[aSuperType.fieldsAccessorsForConcreteClass()/]
 [for (aSuperType2 : EClass | aSuperType.oclAsType(EClass).eAllSuperTypes)]
 [aSuperType2.fieldsAccessorsForConcreteClass()/]
 [/for]
