@@ -53,8 +53,12 @@ private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aPrope
 
 
 [template public associationsForConcreteClass(aClass : EClassifier)]
+[aClass.name.log('---- associationsForConcreteClass classe name ')/]
 [for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+[aProperty.name.log('associationsForConcreteClass property name ')/]
+[aProperty.upperBound.toString().log('associationsForConcreteClass upperbound ')/]
+[aProperty.eType.isPrimitive().toString().log('associationsForConcreteClass isPrimitive ')/]
 
 /**
  * The documentation of the reference [aProperty.name.checkForbidenNameL()/].
@@ -62,7 +66,7 @@ private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aPrope
  * @generated
  */
 [aProperty.genJpaAnnotAttribute(aClass)/]
-private [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/][if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)] = new ArrayList<>()[/if];
+private [if (aProperty.upperBound = -1 or aProperty.upperBound > 1 or not(aProperty.eType.isPrimitive() or aProperty.eType.oclIsKindOf(EEnum)))]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] [aProperty.name.checkForbidenNameL()/][if (aProperty.upperBound = -1 or aProperty.upperBound > 1 or not(aProperty.eType.isPrimitive() or aProperty.eType.oclIsKindOf(EEnum)))] = new ArrayList<>()[/if];
 [/if]
 [/for]
 [/template]
@@ -70,15 +74,19 @@ private [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List
 
 
 [template public fieldsAccessorsForConcreteClass(aClass : EClassifier)]
+[aClass.name.log('---- fieldsAccessorsForConcreteClass classe name ')/]
 [for (aProperty : EAttribute | aClass.oclAsType(EClass).eAttributes)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
-
+[aProperty.name.log('fieldsAccessorsForConcreteClass property name ')/]
+[aProperty.upperBound.toString().log('fieldsAccessorsForConcreteClass upperbound ')/]
+[aProperty.eType.isPrimitive().toString().log('fieldsAccessorsForConcreteClass isPrimitive ')/]
+[aProperty.eType.oclIsKindOf(EEnum).toString().log('fieldsAccessorsForConcreteClass eType EEnum ')/]
 /**
  * The documentation of the getter get[aProperty.name.checkForbidenNameU()/].
  *
  * @generated
  */
-public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
+public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1 or not(aProperty.eType.isPrimitive() or aProperty.eType.oclIsKindOf(EEnum)))]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
 	return this.[aProperty.name.checkForbidenNameL()/];
 }
 
@@ -87,128 +95,12 @@ public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProper
  *
  * @generated
  */
-public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
+public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1 or not(aProperty.eType.isPrimitive() or aProperty.eType.oclIsKindOf(EEnum)))]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
 	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
 }
 [/if]
 [/for]
 
-[if(aClass.name.equalsIgnoreCase('terminal'))]
-/**
- * The documentation of the getter getElecConnectedTo.
- *
- * @generated
- */
-  public String getElecConnectedTo() {
-     return this.elecConnectedTo;
-  }
-
-/**
- * The documentation of the setter setElecConnectedTo.
- *
- * @generated
- */
- public void setElecConnectedTo(String elecConnectedTo) {
-    this.elecConnectedTo = elecConnectedTo;
- }
-
- /**
-  * The documentation of the getter isUsed.
-  *
-  * @generated
-  */
-   public Boolean isUsed() {
-      return this.used;
-   }
-
- /**
-  * The documentation of the setter setUsed.
-  *
-  * @generated
-  */
-  public void setUsed(Boolean used) {
-     this.used = used;
-  }
-
- [/if]
-
-[if(aClass.name.equalsIgnoreCase('bay'))]
-/**
- * The documentation of the getter bayOrderNumbInSingleLineDiagram.
- *
- * @generated
- */
-  public int getBayOrderNumbInSingleLineDiagram() {
-     return this.bayOrderNumbInSingleLineDiagram;
-  }
-
-/**
- * The documentation of the setter bayOrderNumbInSingleLineDiagram.
- *
- * @generated
- */
- public void setBayOrderNumbInSingleLineDiagram(int bayOrderNumbInSingleLineDiagram) {
-    this.bayOrderNumbInSingleLineDiagram = bayOrderNumbInSingleLineDiagram;
- }
-
- /**
-  * The documentation of the getter busBar.
-  *
-  * @generated
-  */
-   public String getBusBar() {
-      return this.busBar;
-   }
-
- /**
-  * The documentation of the setter busBar.
-  *
-  * @generated
-  */
-  public void setBusBar(String busBar) {
-     this.busBar = busBar;
-  }
-
-[/if]
-
-[if(aClass.name.equalsIgnoreCase('bay') or aClass.name.equalsIgnoreCase('powertransformer') or aClass.name.equalsIgnoreCase('transformerwinding') or aClass.name.equalsIgnoreCase('conductingequipment') or aClass.name.equalsIgnoreCase('voltagelevel') or aClass.name.equalsIgnoreCase('tapchanger') or aClass.name.equalsIgnoreCase('subequipment'))]
-/**
- * The documentation of the getter xCoordinateInLibSchema.
- *
- * @generated
- */
-  public float getXCoordinateInLibSchema() {
-     return this.xCoordinateInLibSchema;
-  }
-
-/**
- * The documentation of the setter xCoordinateInLibSchema.
- *
- * @generated
- */
- public void setXCoordinateInLibSchema(float xCoordinateInLibSchema) {
-    this.xCoordinateInLibSchema = xCoordinateInLibSchema;
- }
-
- /**
-  * The documentation of the getter yCoordinateInLibSchema.
-  *
-  * @generated
-  */
-   public float getYCoordinateInLibSchema() {
-      return this.yCoordinateInLibSchema;
-   }
-
- /**
-  * The documentation of the setter yCoordinateInLibSchema.
-  *
-  * @generated
-  */
-  public void setYCoordinateInLibSchema(float yCoordinateInLibSchema) {
-     this.yCoordinateInLibSchema = yCoordinateInLibSchema;
-  }
-
-[/if]
 [/template]
 
 
@@ -225,15 +117,19 @@ public void set[aProperty.name.checkForbidenNameU()/]([if (aProperty.upperBound 
 
 
 [template public associationsAccessorsForConcreteClass(aClass : EClassifier)]
+[aClass.name.log('---- associationsAccessorsForConcreteClass classe name ')/]
 [for (aProperty : EReference | aClass.oclAsType(EClass).eReferences)]
 [if( not( aProperty.genNameForAttribute().equalsIgnoreCase('EFeatureMapEntry') ) )]
+[aProperty.name.log('associationsAccessorsForConcreteClass property name ')/]
+[aProperty.upperBound.toString().log('associationsAccessorsForConcreteClass upperbound ')/]
+[aProperty.eType.isPrimitive().toString().log('associationsAccessorsForConcreteClass isPrimitive ')/]
 
 /**
  * associations get[aProperty.name.checkForbidenNameU()/].
  * 
  * @generated
  */
-public [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
+public [if (aProperty.upperBound = -1 or aProperty.upperBound > 1 or not(aProperty.eType.isPrimitive() or aProperty.eType.oclIsKindOf(EEnum)))]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] get[aProperty.name.checkForbidenNameU()/]() {
 	return this.[aProperty.name.checkForbidenNameL()/];
 }
 
@@ -242,7 +138,7 @@ public [if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<
  * 
  * @generated
  */
-public void set[aProperty.name.toUpperFirst()/]([if (true or aProperty.upperBound = -1 or aProperty.upperBound > 1)]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
+public void set[aProperty.name.toUpperFirst()/]([if (aProperty.upperBound = -1 or aProperty.upperBound > 1 or not(aProperty.eType.isPrimitive() or aProperty.eType.oclIsKindOf(EEnum)))]List<[aProperty.genNameForAttribute()/]>[else][aProperty.genNameForAttribute()/][/if] new[aProperty.name.checkForbidenNameU()/]) {
 	this.[aProperty.name.checkForbidenNameL()/] = new[aProperty.name.checkForbidenNameU()/];
 }
 [/if]

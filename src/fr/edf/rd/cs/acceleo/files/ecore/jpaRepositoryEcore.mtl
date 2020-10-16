@@ -11,7 +11,6 @@
  * @param aClass
  */]
 [template public genRepositoryJavaFile(aClass : EClassifier, aPackage : EPackage)]
-[if(aClass.isJpaEntityNeeded())]
 [file (aClass.genFilePathForRepositoryClass(), false, 'UTF-8')]
 
 package [aClass.genPackageValue()/].repositories;
@@ -26,7 +25,7 @@ package [aClass.genPackageValue()/].repositories;
 
 }
 [/file]
-[/if]
+
 [/template]
 
 
@@ -38,6 +37,6 @@ import org.springframework.stereotype.*;
 
 
 [template public genFilePathForRepositoryClass(aClassifier : EClassifier)]
-[aClassifier.getSourceFolder() + aClassifier.packagePath() + '/repositories/I' + aClassifier.name.toUpperFirst() + 'JPAQueriesRepository.java'/]
+[aClassifier.packagePath() + '/repositories/I' + aClassifier.name.toUpperFirst() + 'JPAQueriesRepository.java'/]
 [/template]
 

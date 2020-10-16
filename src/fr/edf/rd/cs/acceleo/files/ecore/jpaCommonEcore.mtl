@@ -29,6 +29,8 @@
 	or aClassifier.name.equalsIgnoreCase('__EIntegerObject')
 	or aClassifier.name.equalsIgnoreCase('__EShortObject')
 	or aClassifier.name.equalsIgnoreCase('__EString')
+	or aClassifier.name.equalsIgnoreCase('FLOAT')
+	or aClassifier.name.equalsIgnoreCase('DATE')
 /]
 
 [query public isPrimitive(aAttribute : EAttribute) : Boolean =
@@ -40,6 +42,8 @@
 	or aAttribute.eType.name.equalsIgnoreCase('__EIntegerObject')
 	or aAttribute.eType.name.equalsIgnoreCase('__EShortObject')
 	or aAttribute.eType.name.equalsIgnoreCase('__EString')
+	or aAttribute.eType.name.equalsIgnoreCase('FLOAT')
+	or aAttribute.eType.name.equalsIgnoreCase('DATE')
 /]
 
 [query public isPrimitive(aReference : EReference) : Boolean =
@@ -51,6 +55,8 @@
 	or aReference.eType.name.equalsIgnoreCase('__EIntegerObject')
 	or aReference.eType.name.equalsIgnoreCase('__EShortObject')
 	or aReference.eType.name.equalsIgnoreCase('__EString')
+	or aReference.eType.name.equalsIgnoreCase('FLOAT')
+	or aReference.eType.name.equalsIgnoreCase('DATE')
 /]
 
 
@@ -79,7 +85,7 @@
 'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','datetime','doi',
 'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
 'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
-'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming','ied',
+'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming',
 'iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
 'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
 'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',

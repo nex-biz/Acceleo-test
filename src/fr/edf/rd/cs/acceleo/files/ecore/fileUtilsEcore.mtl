@@ -23,7 +23,7 @@
  * @param aType The type (class, interface or enumeration most of the time).
  */]
 [template public genFilePathForInterfaceClass(aClassifier : EClassifier)]
-[aClassifier.getSourceFolder() + aClassifier.packagePath() + '/interfaces/I' + aClassifier.name.toUpperFirst()/].java
+[aClassifier.packagePath() + '/interfaces/I' + aClassifier.name.toUpperFirst()/].java
 [/template]
 
 
@@ -32,7 +32,7 @@
  * @param aType The type (class, interface or enumeration most of the time).
  */]
 [template public genFilePathForConcreteClass(aClassifier : EClassifier)]
-[aClassifier.getSourceFolder() + aClassifier.packagePath() + aClassifier.name.toUpperFirst()/].java
+[aClassifier.packagePath() + aClassifier.name.toUpperFirst()/].java
 [/template]
 
 
@@ -41,7 +41,7 @@
  * @param aType The type (class, interface or enumeration most of the time).
  */]
 [template public genFilePath(aClassifier : EClassifier, classType : String)]
-[aClassifier.getSourceFolder() + aClassifier.packagePath() + classType + aClassifier.name.toUpperFirst()/].java
+[aClassifier.packagePath() + classType + aClassifier.name.toUpperFirst()/].java
 [/template]
 
 

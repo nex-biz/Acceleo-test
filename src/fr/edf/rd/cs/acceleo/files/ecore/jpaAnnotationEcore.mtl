@@ -24,10 +24,10 @@ import javax.persistence.*;
 [/template]
 
 [template public genJpaAnnotAttribute(aProperty : EAttribute, aClass : EClassifier)]
-[aProperty.name.log('ATTRIBUTE ' + aProperty.name + ' :')
-/][aProperty.eType.isPrimitive().toString().log('IS_Primite pour ' + aProperty.eType.name + ' :')
-/][aProperty.upperBound.toString().log('aProperty.upperBound ')
-/][if( true or aClass.isJpaEntityNeeded() )]
+[aProperty.name.log('ATTRIBUTE ' + aProperty.name + ' :')/]
+[aProperty.eType.isPrimitive().toString().log('IS_Primite pour ' + aProperty.eType.name + ' :')/]
+[aProperty.upperBound.toString().log('aProperty.upperBound ')/]
+[if( true or aClass.isJpaEntityNeeded() )]
 	[if( aProperty.eType.isPrimitive() )]
 		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@ElementCollection(fetch = FetchType.EAGER) // Primitive
 		[else]// single Reference Primitive
@@ -45,11 +45,11 @@ import javax.persistence.*;
 
 
 [template public genJpaAnnotAttribute(aProperty : EReference, aClass : EClassifier)]
-[aProperty.name.log('ATTRIBUTE ' + aProperty.name + ' :')
-/][aProperty.eType.isPrimitive().toString().log('IS_Primite pour ' + aProperty.eType.name + ' :')
-/][aProperty.upperBound.toString().log('aProperty.upperBound ')
-/][aProperty.eOpposite.upperBound.toString().log('aProperty.eOpposite.UpperBound ')
-/][if( true or aClass.isJpaEntityNeeded() )]
+[aProperty.name.log('ATTRIBUTE ' + aProperty.name + ' :')/]
+[aProperty.eType.isPrimitive().toString().log('IS_Primite pour ' + aProperty.eType.name + ' :')/]
+[aProperty.upperBound.toString().log('aProperty.upperBound ')/]
+[aProperty.eOpposite.upperBound.toString().log('aProperty.eOpposite.UpperBound ')/]
+[if( true or aClass.isJpaEntityNeeded() )]
 	[if( aProperty.eType.isPrimitive() )]
 		[if( aProperty.upperBound = -1 or aProperty.upperBound > 1)]@ElementCollection(fetch = FetchType.EAGER) // Primitive
 		[else]// single Reference Primitive
@@ -96,7 +96,7 @@ import javax.persistence.*;
 'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','datetime','doi',
 'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
 'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
-'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming','ied',
+'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming',
 'iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
 'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
 'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
@@ -117,6 +117,7 @@ import javax.persistence.*;
 [/template]
 
 [template public genJpaAnnotAttributeTransient(aClassName : EString, aProperty : EReference)]
+[aProperty.name.toLowerCase().log('genJpaAnnotAttributeTransient ')/]
 [if (Sequence{ 'abstractdataattribute','abstractdataobject','abstracteqfuncsubfunc',
 'accesscontrol','accesspoint','address',
 'agauthentication','agdatrgop','agdesc','agldref','aglnref','agoptfields','agsmvopts','agvirtual',
@@ -128,7 +129,7 @@ import javax.persistence.*;
 'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
 'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
 'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming',
-'ied','iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
+'iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
 'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
 'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
 'rptenabled','sampledvaluecontrol','samplespersec','scl','sclobject','secpersamples','server','serverat','serviceconfreportcontrol',
@@ -153,7 +154,7 @@ import javax.persistence.*;
 'parentdurationinmillisec','parentdurationinsec','parentdynassociation','parentdyndataset','parenteqfunction','parenteqsubfunction','parentequipment','parentequipmentcontainer','parentextref',
 'parentfcda','parentfilehandling','parentgeneralequipment','parentgeneralequipmentcontainer','parentgetcbvalue','parentgetdataobjectdefinition','parentgetdatasetvalue',
 'parentgetdirectory','parentgoose','parentgoosedirectory','parentgoosesecurity',
-'parentgse','parentgsecontrol','parentgsedir','parentgsesettings','parentgsse','parentguid','parentheader','parenthistory','parenthitem','parentidnaming','parentied','parentiedname','parentinputs',
+'parentgse','parentgsecontrol','parentgsedir','parentgsesettings','parentgsse','parentguid','parentheader','parenthistory','parenthitem','parentidnaming','parentiedname','parentinputs',
 'parentissuername','parentkdc','parentldevice','parentline','parentln','parentln0','parentlnodecontainer',
 'vlog','parentlogcontrol','parentlogsettings','parentmaxtime','parentmcsecurity','parentmintime','parentneutralpoint','parentoptfields','parentp_physconn','parentp','parentpaddr',
 'parentphysconn','parentpowersystemresource','parentprivate','parentprocess','parentprotns','parentprotocol','parentreadwrite','parentreadprot','parentreportcontrol','parentreportsettings',
@@ -178,7 +179,7 @@ import javax.persistence.*;
 'referredbydurationinmillisec','referredbydurationinsec','referredbydynassociation','referredbydyndataset','referredbyeqfunction','referredbyeqsubfunction','referredbyequipment','referredbyequipmentcontainer','referredbyextref',
 'referredbyfcda','referredbyfilehandling','referredbygeneralequipment','referredbygeneralequipmentcontainer','referredbygetcbvalue','referredbygetdataobjectdefinition',
 'referredbygetdatasetvalue','referredbygetdirectory','referredbygoose','referredbygoosedirectory','referredbygoosesecurity',
-'referredbygse','referredbygsecontrol','referredbygsedir','referredbygsesettings','referredbygsse','referredbyguid','referredbyheader','referredbyhistory','referredbyhitem','referredbyidnaming','referredbyied','referredbyiedname','referredbyinputs',
+'referredbygse','referredbygsecontrol','referredbygsedir','referredbygsesettings','referredbygsse','referredbyguid','referredbyheader','referredbyhistory','referredbyhitem','referredbyidnaming','referredbyiedname','referredbyinputs',
 'referredbyissuername','referredbykdc','referredbyldevice','referredbyline','referredbyln','referredbyln0','referredbylnodecontainer',
 'referredbylog','referredbylogcontrol','referredbylogsettings','referredbymaxtime','referredbymcsecurity','referredbymintime','referredbyneutralpoint','referredbyoptfields','referredbyp_physconn','referredbyp','referredbypaddr',
 'referredbyphysconn','referredbypowersystemresource','referredbyprivate','referredbyprocess','referredbyprotns','referredbyprotocol','referredbyreadwrite','referredbyreadprot','referredbyreportcontrol','referredbyreportsettings',
@@ -203,7 +204,7 @@ import javax.persistence.*;
 'referstodurationinmillisec','referstodurationinsec','referstodynassociation','referstodyndataset','referstoeqfunction','referstoeqsubfunction','referstoequipment','referstoequipmentcontainer','referstoextref',
 'referstofcda','referstofilehandling','referstogeneralequipment','referstogeneralequipmentcontainer','referstogetcbvalue','referstogetdataobjectdefinition','referstogetdatasetvalue',
 'referstogetdirectory','referstogoose','referstogoosedirectory','referstogoosesecurity',
-'referstogse','referstogsecontrol','referstogsedir','referstogsesettings','referstogsse','referstoguid','referstoheader','referstohistory','referstohitem','referstoidnaming','referstoied','referstoiedname','referstoinputs',
+'referstogse','referstogsecontrol','referstogsedir','referstogsesettings','referstogsse','referstoguid','referstoheader','referstohistory','referstohitem','referstoidnaming','referstoiedname','referstoinputs',
 'referstoissuername','referstokdc','referstoldevice','referstoline','referstoln','referstoln0','referstolnodecontainer',
 'referstolog','referstologcontrol','referstologsettings','referstomaxtime','referstomcsecurity','referstomintime','referstoneutralpoint','referstooptfields','referstop_physconn','referstop','referstopaddr',
 'referstophysconn','referstopowersystemresource','referstoprivate','referstoprocess','referstoprotns','referstoprotocol','referstoreadwrite','referstoreadprot','referstoreportcontrol','referstoreportsettings',
@@ -227,7 +228,7 @@ import javax.persistence.*;
 'dai','dataobjectdirectory','dataset','datasetdirectory','datatypetemplates','datatype','datetime','doi',
 'durationinmillisec','durationinsec','dynassociation','dyndataset','eqfunction','eqsubfunction','equipment','equipmentcontainer','extref',
 'fcda','filehandling','generalequipment','generalequipmentcontainer','getcbvalue','getdataobjectdefinition','getdatasetvalue','getdirectory',
-'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming','ied',
+'goose','goosedirectory','goosesecurity','gse','gsecontrol','gsedir','gsesettings','gsse','guid','header','history','hitem','idnaming',
 'iedname','inputs','issuername','kdc','ldevice','line','ln','ln0','lnodecontainer',
 'log','logcontrol','logsettings','maxtime','mcsecurity','mintime','neutralpoint','optfields','p_physconn','p','paddr',
 'physconn','powersystemresource','private','process','protns','protocol','readwrite','readprot','reportcontrol','reportsettings',
@@ -236,7 +237,7 @@ import javax.persistence.*;
 'servicewithmaxandmodify','servicewithmaxnonzero','servicewithoptionalmax','serviceyesno','setdatasetvalue',
 'settingcontrol','settinggroups','sgeedit','smprate','smv','smvopts','smvsc','smvsecurity','smvsettings',
 'subject','subnetwork','supsubscription','text','timeractivatedcontrol','timesyncprot','trgops',
-'unnaming','valuehandling','valuewithunit'
+'unnaming','valuehandling','valuewithunit','rootobject','referstoecsproject'
 }->includes(aClassName.toLowerCase())))]
 [aClassName.genJpaAnnotAttributeManyToMany(aProperty)/]
 [else]

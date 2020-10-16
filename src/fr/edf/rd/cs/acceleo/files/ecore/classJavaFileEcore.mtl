@@ -16,6 +16,7 @@
  * @param aClass
  */]
 [template public genClassJavaFile(aClass : EClassifier, aPackage : EPackage)]
+[if(not(aClass.isPrimitive()))]
 
 [file (aClass.genFilePathForInterfaceClass(), false, 'UTF-8')]
 [aClass.genCopyrightHeader()/]
@@ -33,8 +34,7 @@ public [aClass.abstraction()/] interface [aClass.genNameForInterfaceClass()/][aC
 [/file]
 
 
-
-
+[if(not(aClass.name.equalsIgnoreCase('RootObject')))]
 [file (aClass.genFilePathForConcreteClass(), false, 'UTF-8')]
 [aClass.genCopyrightHeader()/]
 package [aClass.genPackageValue()/];
@@ -90,8 +90,11 @@ public [aClass.abstraction()/] class [aClass.genNameForConcreteClass()/][aClass.
     [aClass.classBody(aPackage)/]
 }
 [/file]
-
+[/if]
+[if(aClass.isJpaEntityNeeded() and not(aClass.name.equalsIgnoreCase('RootObject') or aClass.name.equalsIgnoreCase('ObjectCardinality') or aClass.name.equalsIgnoreCase('SystemOrSubstation') or aClass.name.equalsIgnoreCase('RevisionHistory')))]
 [aClass.genRepositoryJavaFile(aPackage)/]
+[/if]
+[/if]
 [/template]
 
 [template private classBody(aClass : EClassifier, aPackage : EPackage) post(trim())]

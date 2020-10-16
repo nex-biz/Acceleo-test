@@ -2,9 +2,10 @@
 [module rootObjectEcore('http://www.eclipse.org/emf/2002/Ecore')]
 
 [import fr::edf::rd::cs::acceleo::properties::properties /]
+[import fr::edf::rd::cs::acceleo::files::ecore::jpaCommonEcore /]
 
 [template public genClassFiles( oclAny : OclAny )]
-[genRootObjectClassFile()/]
+[genRootObjectClassFile('RootObject')/]
 [comment genObjectCardinalityClassFile()/]
 [comment genInterfaceClassFile('ObjectCardinality')/]
 [genInterfaceClassJPAQueriesRepositoryFile('ObjectCardinality')/]
@@ -22,7 +23,7 @@
 [genInterfaceClassJPAQueriesRepositoryFile('RevisionHistory')/]
 [genInterfaceClassJPAQueriesRepositoryFile('RootObject')/]
 [comment genDomainKindEnumFile()/]
-[genProjectStatusEnumFile()/]
+[comment genProjectStatusEnumFile()/]
 
 [/template]
 
@@ -30,8 +31,9 @@
  * The documentation of the template genClassJavaFile.
  * @param aClass
  */]
-[template public genRootObjectClassFile( oclAny : OclAny )]
-[file ('fr/edf/rd/cs/internal/entities/scl/RootObject.java', true, 'UTF-8')]
+[template public genRootObjectClassFile( oclAny : OclAny, aClassName: EString  )]
+[aClassName.log('genRootObjectClassFile ')/]
+[file ('fr/edf/rd/cs/internal/entities/scl/RootObject.java', false, 'UTF-8')]
 package fr.edf.rd.cs.internal.entities.scl;
 
 import javax.persistence.*;
@@ -594,7 +596,8 @@ public  interface I[aClassName/] {
 
 
 [template public genInterfaceClassJPAQueriesRepositoryFile( oclAny : OclAny, aClassName: EString )]
-[file ('fr/edf/rd/cs/internal/entities/scl/repositories/I' + aClassName + 'JPAQueriesRepository.java', true, 'UTF-8')]
+[aClassName.log('genInterfaceClassJPAQueriesRepositoryFile ')/]
+[file ('fr/edf/rd/cs/internal/entities/scl/repositories/I' + aClassName + 'JPAQueriesRepository.java', false, 'UTF-8')]
 package fr.edf.rd.cs.internal.entities.scl.repositories;
 
 import org.springframework.data.jpa.repository.*;
